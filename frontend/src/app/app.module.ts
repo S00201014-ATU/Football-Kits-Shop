@@ -9,6 +9,7 @@ import { NavigationBarComponent } from './components/navigation-bar/navigation-b
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { FormsModule } from '@angular/forms';
+import { AddProductComponent } from './components/add-product/add-product.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { FormsModule } from '@angular/forms';
     NavigationBarComponent,
     CartComponent,
     CheckoutComponent,
+    AddProductComponent,
   ],
   imports: [
     BrowserModule,
