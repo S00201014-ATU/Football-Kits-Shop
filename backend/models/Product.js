@@ -20,12 +20,12 @@ const productSchema = new mongoose.Schema({
   tags: {
     league: {
       type: String,
-      enum: ['Ligue 1', 'Bundesliga', 'Serie A', 'La Liga', 'Premier League', 'Other'],
+      enum: ['Ligue 1', 'Bundesliga', 'Serie A', 'La Liga', 'Premier League', 'Other Leagues'],
       required: true,
     },
     manufacturer: {
       type: String,
-      enum: ['Adidas', 'Nike', 'Castore', 'Umbro', 'Puma', "O'Neills", 'Other'],
+      enum: ['Adidas', 'Nike', 'Castore', 'Umbro', 'Puma', "O'Neills", 'Other Manufacturers'],
       required: true,
     },
     europeanCompetition: {
