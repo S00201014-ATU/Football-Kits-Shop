@@ -1,1 +1,11 @@
-<p>cart works!</p>
+<h1>Your Cart</h1>
+<div *ngIf="cartItems.length === 0">
+  <p>Your cart is empty.</p>
+</div>
+
+<div *ngFor="let item of cartItems" class="cart-item">
+  <h2>{{item.name}}</h2>
+  <p>Price: €{{item.price}}</p>
+</div>
+
+<button *ngIf="cartItems.length" (click)="clearCart()">Clear Cart</button>
