@@ -17,6 +17,18 @@ mongoose.connect(mongoUri, {
   console.error('Failed to connect to MongoDB', err);
 });
 
+// Middleware to parse JSON requests
+app.use(express.json());
+
+// Import the products route
+const productsRoute = require('./routes/products');
+app.use('/api/products', productsRoute);
+
+// Handle the root route
+app.get('/', (req, res) => {
+  res.send('Welcome to the Football Kits API');
+});
+
 // Start the server
 const port = 3000;
 app.listen(port, () => {
