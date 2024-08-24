@@ -8,6 +8,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule
   ],
   providers: [
     provideHttpClient(withFetch()),

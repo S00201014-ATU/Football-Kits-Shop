@@ -1,1 +1,99 @@
-<p>checkout works!</p>
+<h1>Checkout</h1>
+
+<form #checkoutForm="ngForm" (ngSubmit)="onSubmit(checkoutForm)">
+  <!-- Personal Information -->
+  <div>
+    <label for="forename">Forename:</label>
+    <input type="text" id="forename" name="forename" ngModel required />
+  </div>
+  <div>
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" name="surname" ngModel required />
+  </div>
+
+  <!-- Shipping Details -->
+  <div>
+    <label for="addressLine1">Address Line 1:</label>
+    <input type="text" id="addressLine1" name="addressLine1" ngModel required />
+  </div>
+  <div>
+    <label for="addressLine2">Address Line 2:</label>
+    <input type="text" id="addressLine2" name="addressLine2" ngModel />
+  </div>
+  <div>
+    <label for="town">Town:</label>
+    <input type="text" id="town" name="town" ngModel required />
+  </div>
+  <div>
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" ngModel required />
+  </div>
+
+
+  <!-- Contact Information -->
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" ngModel required />
+  </div>
+  <div>
+    <label for="phone">Phone:</label>
+    <input type="tel" id="phone" name="phone" ngModel required />
+  </div>
+
+  <!-- Card Details -->
+  <h2>Card Details</h2>
+  <div>
+    <label for="cardName">Cardholder's Name:</label>
+    <input type="text" id="cardName" name="cardName" ngModel required />
+  </div>
+  <div>
+    <label for="cardNumber">Card Number:</label>
+    <input
+      type="text"
+      id="cardNumber"
+      name="cardNumber"
+      [(ngModel)]="cardNumber"
+      (input)="formatCardNumber()"
+      maxlength="19"
+      required
+    />
+  </div>
+  <div>
+    <label for="expirationYear">Expiration Year:</label>
+    <select
+      id="expirationYear"
+      name="expirationYear"
+      [(ngModel)]="selectedYear"
+      (change)="updateAvailableMonths()"
+      required
+    >
+      <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="expirationMonth">Expiration Month:</label>
+    <select id="expirationMonth" name="expirationMonth" ngModel required>
+      <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="cvv">CVV:</label>
+    <input
+      type="text"
+      id="cvv"
+      name="cvv"
+      ngModel
+      required
+      pattern="^[0-9]{3}$"
+      maxlength="3"
+    />
+  </div>
+
+  <!-- Order Summary -->
+  <div class="checkout-summary">
+    <h2>Order Summary</h2>
+    <p>Total Price: €{{ totalPrice }}</p>
+  </div>
+
+  <button type="submit" [disabled]="!checkoutForm.valid">Place Order</button>
+</form>
