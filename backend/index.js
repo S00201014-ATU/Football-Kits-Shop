@@ -1,10 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv'); // Load dotenv package
+const dotenv = require('dotenv');
 const app = express();
+const cors = require('cors');
 
 // Load environment variables from .env file
 dotenv.config();
+
+// Use CORS to allow requests from different origins
+app.use(cors());
 
 // Use the MongoDB connection string from .env
 const mongoUri = process.env.MONGO_URI;

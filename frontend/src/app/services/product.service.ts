@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 interface Product {
+  _id: string;
   name: string;
   price: number;
   imageUrl: string;
