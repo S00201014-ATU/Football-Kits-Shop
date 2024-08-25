@@ -4,7 +4,7 @@ import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrl: './cart.component.css'
+  styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
@@ -24,8 +24,9 @@ export class CartComponent implements OnInit {
 
   decreaseQuantity(product: any): void {
     this.cartService.decreaseQuantity(product);
-    this.updateCartItems();
+    this.updateCartItems();  // Make sure the cart is updated after decreasing quantity or removal
   }
+
 
   removeProduct(productId: string): void {
     this.cartService.removeProduct(productId);
