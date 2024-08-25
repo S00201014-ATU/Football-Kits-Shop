@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// Define the user schema
+// Define the User schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, 
+    unique: true,
   },
   password: {
     type: String,
@@ -19,34 +19,32 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    // Role can only be 'customer' or 'staff'
-    enum: ['customer', 'staff'],
-    default: 'customer',
+    enum: ['customer', 'staff'], // Restrict role to customer or staff
+    default: 'customer', // Default role is 'customer'
   },
 });
 
-// Pre-save hook to hash the password before saving
+// Pre-save hook to hash the password before saving to the database
 userSchema.pre('save', async function (next) {
   try {
+    // Only hash the password if it has been modified (or is new)
     if (!this.isModified('password')) {
       return next();
     }
 
     // Generate a salt and hash the password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = await bcrypt.hash(this.password, salt);
 
-    // Replace the plain text password with the hashed password
-    this.password = hashedPassword;
     next();
   } catch (err) {
     return next(err);
   }
 });
 
-// Method to compare input password with stored hashed password
+// Method to compare input password with the stored hashed password
 userSchema.methods.comparePassword = async function (inputPassword) {
-  return await bcrypt.compare(inputPassword, this.password);
+  return bcrypt.compare(inputPassword, this.password);
 };
 
 const User = mongoose.model('User', userSchema);

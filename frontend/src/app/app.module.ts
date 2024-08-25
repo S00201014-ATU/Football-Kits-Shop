@@ -11,6 +11,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { FormsModule } from '@angular/forms';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { EditProductComponent } from './components/edit-product/edit-product.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { EditProductComponent } from './components/edit-product/edit-product.com
     CheckoutComponent,
     AddProductComponent,
     EditProductComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

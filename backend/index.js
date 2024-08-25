@@ -5,6 +5,7 @@ const cors = require('cors');
 const Product = require('./models/Product');
 const productsRoute = require('./routes/products');
 const app = express();
+const usersRoute = require('./routes/users')
 
 // Load environment variables from .env file
 dotenv.config();
@@ -25,6 +26,7 @@ mongoose.connect(mongoUri, {})
 
 // Routes
 app.use('/api/products', productsRoute);
+app.use('/api/users', usersRoute);
 
 // Handle the root route
 app.get('/', (req, res) => {
