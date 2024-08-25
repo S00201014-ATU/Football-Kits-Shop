@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']  // Make sure it's styleUrls, not styleUrl
+  styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   constructor(private http: HttpClient, private router: Router) {}
