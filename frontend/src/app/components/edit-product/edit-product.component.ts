@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.css']
+  styleUrl: './edit-product.component.css'
 })
 export class EditProductComponent implements OnInit {
   productId: string = '';

@@ -8,6 +8,8 @@
   <p>League: {{ product.tags.league }}</p>
   <p>Manufacturer: {{ product.tags.manufacturer }}</p>
   <p>European Competition: {{ product.tags.europeanCompetition }}</p>
-  <button routerLink="/edit-product/{{product._id}}">Edit</button>
-  <button (click)="confirmDelete(product._id)">Delete</button>
+
+  <!-- Show Edit and Delete buttons only for staff users -->
+  <button *ngIf="isStaff" routerLink="/edit-product/{{product._id}}">Edit</button>
+  <button *ngIf="isStaff" (click)="confirmDelete(product._id)">Delete</button>
 </div>
