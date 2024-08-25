@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ProductService } from '../../services/product.service';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 
@@ -11,21 +10,24 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
-  searchTerm: string = ''; // Added searchTerm for the search functionality
+  searchTerm: string = '';
+  selectedTag: string = 'All Kits'; // Default tag
+  selectedCategory: string = 'All Kits'; // Default category
   isStaff: boolean = false;
-  noProductsFound: boolean = false; // New message to show "no products found" message
+  noProductsFound: boolean = false;
+
+  leagues: string[] = ['Ligue 1', 'Bundesliga', 'Serie A', 'La Liga', 'Premier League', 'Other Leagues'];
+  manufacturers: string[] = ['Adidas', 'Nike', 'Puma', 'Umbro', 'Castore', "O'Neills", 'Other Manufacturers'];
+  competitions: string[] = ['Champions League', 'Europa League', 'Conference League', 'No European Football'];
 
   constructor(
-    private productService: ProductService,
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit(): void {
-    // Load products initially
-    this.loadProducts();
+    this.loadProducts(); // Load all products initially
 
-    // Check if running in the browser
     if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('token');
       if (token) {
@@ -35,19 +37,25 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  // Function to load products, with optional search term
-  loadProducts(searchTerm: string = ''): void {
+  // Load products based on search term or selected tag
+  loadProducts(): void {
     let url = 'http://localhost:3000/api/products';
+    const params: any = {};
 
-    // Append search term to the URL if it's not empty
-    if (searchTerm) {
-      url += `?search=${searchTerm}`;
+    if (this.searchTerm) {
+      params.search = this.searchTerm; // Pass search term to the backend
     }
 
-    this.http.get(url).subscribe(
+    if (this.selectedCategory === 'European Competitions' && this.selectedTag === 'All Competitions') {
+      params.excludeTag = 'No European Football'; // Exclude "No European Football" when "All Competitions" is selected
+    } else if (this.selectedTag && this.selectedTag !== 'All Kits' && this.selectedTag !== 'All Leagues' && this.selectedTag !== 'All Manufacturers') {
+      params.tag = this.selectedTag; // Pass selected tag to the backend
+    }
+
+    this.http.get(url, { params }).subscribe(
       (response: any) => {
         this.products = response;
-        this.noProductsFound = this.products.length === 0; // Set message if no products found
+        this.noProductsFound = this.products.length === 0;
       },
       (error) => {
         console.error('Failed to load products', error);
@@ -55,9 +63,27 @@ export class ProductListComponent implements OnInit {
     );
   }
 
-  // Triggered when the user clicks the search button
+  // Called when a new category is selected from the main dropdown
+  onCategoryChange(): void {
+    if (this.selectedCategory === 'Leagues') {
+      this.selectedTag = 'All Leagues'; // Default for Leagues
+    } else if (this.selectedCategory === 'Manufacturers') {
+      this.selectedTag = 'All Manufacturers'; // Default for Manufacturers
+    } else if (this.selectedCategory === 'European Competitions') {
+      this.selectedTag = 'All Competitions'; // Default for European Competitions
+    } else {
+      this.selectedTag = 'All Kits'; // Default for All Kits
+    }
+    this.loadProducts(); // Ensure products are loaded immediately after the category changes
+  }
+
+  // Called when a tag is selected from the sub-dropdown
+  onTagChange(): void {
+    this.loadProducts(); // Reload products based on the selected tag
+  }
+
   onSearch(): void {
-    this.loadProducts(this.searchTerm); // Pass the searchTerm to the loadProducts function
+    this.loadProducts(); // Reload products based on search term
   }
 
   // Confirm and delete a product

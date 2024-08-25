@@ -6,9 +6,47 @@
   <button (click)="onSearch()">Search</button>
 </div>
 
+<!-- Filter Dropdown with Submenus -->
+<div class="filter-dropdown">
+  <label for="categoryFilter">Filter by Category:</label>
+  <select id="categoryFilter" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+    <option value="All Kits">All Kits</option>
+    <option value="Leagues">Leagues</option>
+    <option value="Manufacturers">Manufacturers</option>
+    <option value="European Competitions">European Competitions</option>
+  </select>
+</div>
+
+<!-- Conditional Submenu for Leagues -->
+<div *ngIf="selectedCategory === 'Leagues'" class="submenu">
+  <label for="leagueFilter">Select League:</label>
+  <select id="leagueFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
+    <option value="All Leagues">All Leagues</option>
+    <option *ngFor="let league of leagues" [value]="league">{{ league }}</option>
+  </select>
+</div>
+
+<!-- Conditional Submenu for Manufacturers -->
+<div *ngIf="selectedCategory === 'Manufacturers'" class="submenu">
+  <label for="manufacturerFilter">Select Manufacturer:</label>
+  <select id="manufacturerFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
+    <option value="All Manufacturers">All Manufacturers</option>
+    <option *ngFor="let manufacturer of manufacturers" [value]="manufacturer">{{ manufacturer }}</option>
+  </select>
+</div>
+
+<!-- Conditional Submenu for European Competitions -->
+<div *ngIf="selectedCategory === 'European Competitions'" class="submenu">
+  <label for="competitionFilter">Select European Competition:</label>
+  <select id="competitionFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
+    <option value="All Competitions">All Competitions</option>
+    <option *ngFor="let competition of competitions" [value]="competition">{{ competition }}</option>
+  </select>
+</div>
+
 <!-- Message displayed when no products are found -->
 <div *ngIf="noProductsFound" class="no-products">
-  <p>No products found that match your search.</p>
+  <p>No products found that match your search or filter.</p>
 </div>
 
 <!-- Product Cards -->

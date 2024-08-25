@@ -2,26 +2,45 @@ const express = require('express');
 const Product = require('../models/Product');
 const router = express.Router();
 
-// GET request to fetch all products or search for products by name
+// GET request to fetch all products or search/filter products by name and tag
 router.get('/', async (req, res) => {
   try {
-    const searchTerm = req.query.search; // Get the search term from the query string
+    const searchTerm = req.query.search;
+    const tag = req.query.tag;
+    const excludeTag = req.query.excludeTag;
 
-    let products;
+    let query = {};
+
+    // Apply search term to product name if provided
     if (searchTerm) {
-      // Fetch products that start with the search term (case insensitive)
-      const regex = new RegExp(`^${searchTerm}`, 'i'); // `i` makes the search case insensitive
-      products = await Product.find({ name: { $regex: regex } });
-    } else {
-      // Fetch all products if no search term is provided
-      products = await Product.find();
+      const regex = new RegExp(`^${searchTerm}`, 'i'); // Case-insensitive search
+      query.name = { $regex: regex };
     }
 
-    res.status(200).json(products); // Respond with the fetched products
+    // Apply tag filter if a specific tag is selected
+    if (tag && tag !== 'All Kits' && tag !== 'All Leagues' && tag !== 'All Manufacturers') {
+      query.$or = [
+        { 'tags.league': tag },
+        { 'tags.manufacturer': tag },
+        { 'tags.europeanCompetition': tag }
+      ];
+    }
+
+    // Exclude "No European Football" when "All Competitions" is selected
+    if (excludeTag) {
+      query['tags.europeanCompetition'] = { $ne: excludeTag };
+    }
+
+    // Fetch products based on the combined query
+    const products = await Product.find(query);
+
+    res.status(200).json(products);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch products', error: err });
   }
 });
+
+module.exports = router;
 
 // POST request to add a new product
 router.post('/', async (req, res) => {

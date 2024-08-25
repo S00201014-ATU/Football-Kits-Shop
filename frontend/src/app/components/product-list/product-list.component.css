@@ -12,6 +12,20 @@
   margin-bottom: 20px;
 }
 
+/* Filter dropdown container */
+.filter-dropdown {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Submenu container for the filters */
+.submenu {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
 /* Search bar input */
 .search-bar input {
   padding: 10px;
@@ -20,6 +34,16 @@
   margin-right: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+/* Filter dropdown select */
+.filter-dropdown select, .submenu select {
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 0 10px;
 }
 
 /* Search button styling */
@@ -83,4 +107,24 @@
 
 .product-card a:hover {
   color: #007bff;
+}
+
+/* No products found message */
+.no-products {
+  text-align: center;
+  color: #d9534f;
+  font-size: 1.2em;
+  margin-top: 20px;
+}
+
+/* Dropdown select focus/hover state for a better UI */
+.filter-dropdown select:focus,
+.submenu select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.filter-dropdown select:hover,
+.submenu select:hover {
+  background-color: #f8f9fa;
 }
