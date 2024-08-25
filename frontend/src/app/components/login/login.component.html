@@ -1,0 +1,24 @@
+<h1>Login</h1>
+
+<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="login-form">
+  <!-- Username Input -->
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" ngModel required />
+  </div>
+
+  <!-- Password Input -->
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" ngModel required />
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" [disabled]="!loginForm.valid">Login</button>
+</form>
+
+<!-- Registration Prompt -->
+<p class="register-link">
+  Don't have an account?
+  <a routerLink="/register">Register here</a>
+</p>

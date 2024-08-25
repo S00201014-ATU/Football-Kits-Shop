@@ -24,7 +24,7 @@ export class RegisterComponent {
           alert('Registration successful!');
           // Clear form upon successful registration and redirect to login page
           form.resetForm();
-          this.router.navigate(['/']);  // Redirect after successful registration
+          this.router.navigate(['/login']);  // Redirect after successful registration
         },
         (error) => {
           const errorMessage = error.error?.message || 'Registration failed';
