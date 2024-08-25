@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { HttpClient } from '@angular/common/http';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-product-list',
@@ -11,7 +11,9 @@ import {jwtDecode} from 'jwt-decode';
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
+  searchTerm: string = ''; // Added searchTerm for the search functionality
   isStaff: boolean = false;
+  noProductsFound: boolean = false; // New message to show "no products found" message
 
   constructor(
     private productService: ProductService,
@@ -20,7 +22,7 @@ export class ProductListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Load products
+    // Load products initially
     this.loadProducts();
 
     // Check if running in the browser
@@ -33,10 +35,19 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  loadProducts(): void {
-    this.http.get('http://localhost:3000/api/products').subscribe(
+  // Function to load products, with optional search term
+  loadProducts(searchTerm: string = ''): void {
+    let url = 'http://localhost:3000/api/products';
+
+    // Append search term to the URL if it's not empty
+    if (searchTerm) {
+      url += `?search=${searchTerm}`;
+    }
+
+    this.http.get(url).subscribe(
       (response: any) => {
         this.products = response;
+        this.noProductsFound = this.products.length === 0; // Set message if no products found
       },
       (error) => {
         console.error('Failed to load products', error);
@@ -44,6 +55,12 @@ export class ProductListComponent implements OnInit {
     );
   }
 
+  // Triggered when the user clicks the search button
+  onSearch(): void {
+    this.loadProducts(this.searchTerm); // Pass the searchTerm to the loadProducts function
+  }
+
+  // Confirm and delete a product
   confirmDelete(productId: string): void {
     const confirmDelete = window.confirm('Are you sure you want to delete this product?');
     if (confirmDelete) {
@@ -51,6 +68,7 @@ export class ProductListComponent implements OnInit {
     }
   }
 
+  // Handle product deletion
   deleteProduct(productId: string): void {
     this.http.delete(`http://localhost:3000/api/products/${productId}`).subscribe(
       () => {

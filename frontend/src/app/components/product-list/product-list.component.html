@@ -1,3 +1,17 @@
+<h1>Product List</h1>
+
+<!-- Search Bar -->
+<div class="search-bar">
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Search for products..." />
+  <button (click)="onSearch()">Search</button>
+</div>
+
+<!-- Message displayed when no products are found -->
+<div *ngIf="noProductsFound" class="no-products">
+  <p>No products found that match your search.</p>
+</div>
+
+<!-- Product Cards -->
 <div *ngFor="let product of products" class="product-card">
   <a [routerLink]="['/products', product._id]">
     <img [src]="product.imageUrl" alt="{{ product.name }}" />
