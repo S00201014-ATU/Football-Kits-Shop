@@ -1,1 +1,54 @@
-<p>edit-product works!</p>
+<h1>Edit Product</h1>
+
+<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+  <div>
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" name="name" [(ngModel)]="productData.name" required />
+  </div>
+  <div>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" [(ngModel)]="productData.price" required />
+  </div>
+  <div>
+    <label for="imageUrl">Image URL:</label>
+    <input type="text" id="imageUrl" name="imageUrl" [(ngModel)]="productData.imageUrl" required />
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" [(ngModel)]="productData.description" required></textarea>
+  </div>
+  <div>
+    <label for="league">League:</label>
+    <select id="league" name="league" [(ngModel)]="productData.tags.league" required>
+      <option value="Ligue 1">Ligue 1</option>
+      <option value="Bundesliga">Bundesliga</option>
+      <option value="Serie A">Serie A</option>
+      <option value="La Liga">La Liga</option>
+      <option value="Premier League">Premier League</option>
+      <option value="Other Leagues">Other Leagues</option>
+    </select>
+  </div>
+  <div>
+    <label for="manufacturer">Manufacturer:</label>
+    <select id="manufacturer" name="manufacturer" [(ngModel)]="productData.tags.manufacturer" required>
+      <option value="Adidas">Adidas</option>
+      <option value="Nike">Nike</option>
+      <option value="Puma">Puma</option>
+      <option value="Umbro">Umbro</option>
+      <option value="Castore">Castore</option>
+      <option value="O'Neills">O'Neills</option>
+      <option value="Other Manufacturers">Other Manufacturers</option>
+    </select>
+  </div>
+  <div>
+    <label for="competition">European Competition:</label>
+    <select id="competition" name="competition" [(ngModel)]="productData.tags.europeanCompetition" required>
+      <option value="Champions League">Champions League</option>
+      <option value="Europa League">Europa League</option>
+      <option value="Conference League">Conference League</option>
+      <option value="No European Football">No European Football</option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="!productForm.valid">Update Product</button>
+</form>

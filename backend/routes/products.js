@@ -5,8 +5,8 @@ const router = express.Router();
 // GET request to fetch all products from MongoDB
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find();  // Fetch all products from MongoDB
-    res.status(200).json(products);  // Respond with the fetched products
+    const products = await Product.find();
+    res.status(200).json(products);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch products', error: err });
   }
@@ -25,10 +25,38 @@ router.post('/', async (req, res) => {
   });
 
   try {
-    const savedProduct = await newProduct.save();  // Save product to MongoDB
-    res.status(201).json(savedProduct);  // Respond with the saved product
+    const savedProduct = await newProduct.save();
+    res.status(201).json(savedProduct);
   } catch (err) {
     res.status(500).json({ message: 'Failed to add product', error: err });
+  }
+});
+
+// GET request to fetch a single product by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch product', error: err });
+  }
+});
+
+
+// PUT request to update an existing product
+router.put('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const updatedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update product', error });
   }
 });
 
