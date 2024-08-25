@@ -13,6 +13,7 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { EditProductComponent } from './components/edit-product/edit-product.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { LoginComponent } from './components/login/login.component';
     EditProductComponent,
     RegisterComponent,
     LoginComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

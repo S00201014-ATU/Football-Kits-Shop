@@ -9,6 +9,7 @@ import { EditProductComponent } from './components/edit-product/edit-product.com
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 // Define routes with authentication and role-based protection
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   // Authentication routes (public access)
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
 
   // Fallback route to redirect to the product list
   { path: '**', redirectTo: '', pathMatch: 'full' },

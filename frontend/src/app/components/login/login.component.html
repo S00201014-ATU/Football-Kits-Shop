@@ -13,6 +13,11 @@
     <input type="password" id="password" name="password" ngModel required />
   </div>
 
+  <!-- Forgot Password Link -->
+  <div class="forgot-password-link">
+    <a routerLink="/forgot-password">Forgot Password?</a>
+  </div>
+
   <!-- Submit Button -->
   <button type="submit" [disabled]="!loginForm.valid">Login</button>
 </form>
