@@ -1,47 +1,55 @@
 <h1>Product List</h1>
 
-<!-- Search Bar -->
-<div class="search-bar">
-  <input type="text" [(ngModel)]="searchTerm" placeholder="Search for products..." />
-  <button (click)="onSearch()">Search</button>
-</div>
+<!-- Search and Filter Container -->
+<div class="search-filter-container">
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search for products..."
+      (keyup.enter)="onSearch()"
+    />
+    <button (click)="onSearch()">Search</button>
+  </div>
 
-<!-- Filter Dropdown with Submenus -->
-<div class="filter-dropdown">
-  <label for="categoryFilter">Filter by Category:</label>
-  <select id="categoryFilter" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-    <option value="All Kits">All Kits</option>
-    <option value="Leagues">Leagues</option>
-    <option value="Manufacturers">Manufacturers</option>
-    <option value="European Competitions">European Competitions</option>
-  </select>
-</div>
+  <!-- Filter Dropdown with Submenus -->
+  <div class="filter-dropdown">
+    <label for="categoryFilter">Filter by Category:</label>
+    <select id="categoryFilter" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+      <option value="All Kits">All Kits</option>
+      <option value="Leagues">Leagues</option>
+      <option value="Manufacturers">Manufacturers</option>
+      <option value="European Competitions">European Competitions</option>
+    </select>
+  </div>
 
-<!-- Conditional Submenu for Leagues -->
-<div *ngIf="selectedCategory === 'Leagues'" class="submenu">
-  <label for="leagueFilter">Select League:</label>
-  <select id="leagueFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
-    <option value="All Leagues">All Leagues</option>
-    <option *ngFor="let league of leagues" [value]="league">{{ league }}</option>
-  </select>
-</div>
+  <!-- Conditional Submenu for Leagues -->
+  <div *ngIf="selectedCategory === 'Leagues'" class="submenu">
+    <label for="leagueFilter">Select League:</label>
+    <select id="leagueFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
+      <option value="All Leagues">All Leagues</option>
+      <option *ngFor="let league of leagues" [value]="league">{{ league }}</option>
+    </select>
+  </div>
 
-<!-- Conditional Submenu for Manufacturers -->
-<div *ngIf="selectedCategory === 'Manufacturers'" class="submenu">
-  <label for="manufacturerFilter">Select Manufacturer:</label>
-  <select id="manufacturerFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
-    <option value="All Manufacturers">All Manufacturers</option>
-    <option *ngFor="let manufacturer of manufacturers" [value]="manufacturer">{{ manufacturer }}</option>
-  </select>
-</div>
+  <!-- Conditional Submenu for Manufacturers -->
+  <div *ngIf="selectedCategory === 'Manufacturers'" class="submenu">
+    <label for="manufacturerFilter">Select Manufacturer:</label>
+    <select id="manufacturerFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
+      <option value="All Manufacturers">All Manufacturers</option>
+      <option *ngFor="let manufacturer of manufacturers" [value]="manufacturer">{{ manufacturer }}</option>
+    </select>
+  </div>
 
-<!-- Conditional Submenu for European Competitions -->
-<div *ngIf="selectedCategory === 'European Competitions'" class="submenu">
-  <label for="competitionFilter">Select European Competition:</label>
-  <select id="competitionFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
-    <option value="All Competitions">All Competitions</option>
-    <option *ngFor="let competition of competitions" [value]="competition">{{ competition }}</option>
-  </select>
+  <!-- Conditional Submenu for European Competitions -->
+  <div *ngIf="selectedCategory === 'European Competitions'" class="submenu">
+    <label for="competitionFilter">Select European Competition:</label>
+    <select id="competitionFilter" [(ngModel)]="selectedTag" (change)="onTagChange()">
+      <option value="All Competitions">All Competitions</option>
+      <option *ngFor="let competition of competitions" [value]="competition">{{ competition }}</option>
+    </select>
+  </div>
 </div>
 
 <!-- Message displayed when no products are found -->
@@ -50,18 +58,20 @@
 </div>
 
 <!-- Product Cards -->
-<div *ngFor="let product of products" class="product-card">
-  <a [routerLink]="['/products', product._id]">
-    <img [src]="product.imageUrl" alt="{{ product.name }}" />
-  </a>
-  <h2>{{ product.name }}</h2>
-  <p>{{ product.description }}</p>
-  <p>Price: €{{ product.price }}</p>
-  <p>League: {{ product.tags.league }}</p>
-  <p>Manufacturer: {{ product.tags.manufacturer }}</p>
-  <p>European Competition: {{ product.tags.europeanCompetition }}</p>
+<div class="product-list">
+  <div *ngFor="let product of products" class="product-card">
+    <a [routerLink]="['/products', product._id]">
+      <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image" />
+    </a>
+    <div class="product-info">
+      <h2 class="product-name">{{ product.name }}</h2>
+      <p class="product-price">Price: €{{ product.price }}</p>
 
-  <!-- Show Edit and Delete buttons only for staff users -->
-  <button *ngIf="isStaff" routerLink="/edit-product/{{product._id}}">Edit</button>
-  <button *ngIf="isStaff" (click)="confirmDelete(product._id)">Delete</button>
+      <!-- Show Edit and Delete buttons only for staff users -->
+      <div class="button-group" *ngIf="isStaff">
+        <button class="edit-button" routerLink="/edit-product/{{product._id}}">Edit</button>
+        <button class="delete-button" (click)="confirmDelete(product._id)">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
