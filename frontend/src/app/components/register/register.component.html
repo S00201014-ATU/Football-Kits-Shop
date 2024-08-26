@@ -4,30 +4,40 @@
   <!-- Username Input -->
   <div>
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username" ngModel required />
+    <input type="text" id="username" name="username" ngModel required (input)="onInputChange(registerForm)" />
   </div>
 
   <!-- Email Input -->
   <div>
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" ngModel required />
+    <input type="email" id="email" name="email" ngModel required (input)="onInputChange(registerForm)" />
   </div>
 
   <!-- Password Input -->
   <div>
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password" ngModel required />
+    <input type="password" id="password" name="password" ngModel required (input)="onInputChange(registerForm)" />
+  </div>
+
+  <!-- Confirm Password Input -->
+  <div>
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" ngModel required
+           (input)="onInputChange(registerForm)" (blur)="onConfirmPasswordBlur(registerForm)" />
+    <p *ngIf="passwordMismatch" style="color: red;">Passwords do not match!</p>
   </div>
 
   <!-- Role Selection Dropdown -->
   <div>
     <label for="role">Role:</label>
-    <select id="role" name="role" ngModel required>
+    <select id="role" name="role" ngModel required (change)="onInputChange(registerForm)">
       <option value="customer">Customer</option>
       <option value="staff">Staff</option>
     </select>
   </div>
 
   <!-- Submit Button -->
-  <button type="submit" [disabled]="!registerForm.valid">Register</button>
+  <button type="submit" [disabled]="!registerForm.valid || passwordMismatch" *ngIf="allFieldsFilled">
+    Register
+  </button>
 </form>

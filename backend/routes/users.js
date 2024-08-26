@@ -30,8 +30,40 @@ router.post('/register', async (req, res) => {
     const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    // Send the welcome email only if the user is a customer
+    if (role === 'customer') {
+      // Set up Nodemailer for sending the welcome email
+      const transporter = nodemailer.createTransport({
+        service: 'Outlook',
+        auth: {
+          user: process.env.OUTLOOK_EMAIL,
+          pass: process.env.OUTLOOK_PASSWORD,
+        },
+      });
+
+      // Email content for the welcome email
+      const mailOptions = {
+        from: process.env.OUTLOOK_EMAIL,
+        to: email,
+        subject: 'Welcome to the Shop!',
+        text: `Dear ${username},\n\nWelcome to the shop! Hope you find all you need.\n\nThanks,\nThe Football Kits Shop Team`
+      };
+
+      // Send the welcome email
+      transporter.sendMail(mailOptions, (err) => {
+        if (err) {
+          console.error('Error sending welcome email:', err);
+          return res.status(500).json({ message: 'User registered, but failed to send welcome email.' });
+        }
+        console.log('Welcome email sent successfully to:', email + ' as they were a custmer');
+        return res.status(201).json({ message: 'User registered successfully! Welcome email sent.' });
+      });
+    } else {
+      // If the user is staff, just send the success message without sending an email
+      return res.status(201).json({ message: 'User registered successfully!' });
+    }
   } catch (err) {
+    console.error('Error registering user:', err);
     res.status(500).json({ message: 'Error registering user', error: err });
   }
 });

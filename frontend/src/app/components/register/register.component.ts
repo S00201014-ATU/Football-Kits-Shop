@@ -5,13 +5,16 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  passwordMismatch: boolean = false;
+  allFieldsFilled: boolean = false;
+
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit(form: any): void {
-    if (form.valid) {
+    if (form.valid && !this.passwordMismatch) {
       const userData = {
         username: form.value.username,
         email: form.value.email,
@@ -22,17 +25,28 @@ export class RegisterComponent {
       this.http.post('http://localhost:3000/api/users/register', userData).subscribe(
         (response: any) => {
           alert('Registration successful!');
-          // Clear form upon successful registration and redirect to login page
           form.resetForm();
-          this.router.navigate(['/login']);  // Redirect after successful registration
+          this.router.navigate(['/login']);
         },
         (error) => {
           const errorMessage = error.error?.message || 'Registration failed';
-          alert(errorMessage);  // Display error message in alert
+          alert(errorMessage);
           console.error(error);
         }
-        //Showcasing I know multiple ways of displaying messages
       );
     }
   }
+
+  // Check password mismatch whenever the confirm password field loses focus
+  onConfirmPasswordBlur(form: any): void {
+    if (form.value.password && form.value.confirmPassword) {
+      this.passwordMismatch = form.value.password !== form.value.confirmPassword;
+    }
+  }
+
+  // Check if all fields are filled and form is valid
+  onInputChange(form: any): void {
+    this.allFieldsFilled = form.valid;
+  }
+
 }
