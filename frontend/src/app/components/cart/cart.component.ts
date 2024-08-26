@@ -14,6 +14,11 @@ export class CartComponent implements OnInit {
   constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
+    this.loadCart();
+  }
+
+  // Load the cart items from the cartService
+  loadCart(): void {
     this.cartItems = this.cartService.getCartItems();
     this.calculateTotalPrice();
   }
@@ -27,7 +32,6 @@ export class CartComponent implements OnInit {
     this.cartService.decreaseQuantity(product);
     this.updateCartItems();  // Make sure the cart is updated after decreasing quantity or removal
   }
-
 
   removeProduct(productId: string): void {
     this.cartService.removeProduct(productId);

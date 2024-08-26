@@ -4,62 +4,55 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CartService {
-  private cart: any[] = [];
+  private CART_KEY = 'cartItems';
 
-  constructor() { this.loadCartFromLocalStorage(); }
+  constructor() {}
 
-  // Load cart items from local storage
-
-  private loadCartFromLocalStorage(): void {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      this.cart = JSON.parse(storedCart);
-    }
+  getCartItems(): any[] {
+    // Retrieve the cart from localStorage
+    const cart = localStorage.getItem(this.CART_KEY);
+    return cart ? JSON.parse(cart) : [];
   }
 
-  // Save cart items to local storage
-  private saveCartToLocalStorage(): void {
-    localStorage.setItem('cart', JSON.stringify(this.cart));
-  }
-
-  // Add a product to the cart or update quantity if it already exists
   addToCart(product: any): void {
-    const existingProduct = this.cart.find(item => item._id === product._id);
-    if (existingProduct) {
-      existingProduct.quantity += 1;
+    const cartItems = this.getCartItems();
+    const itemIndex = cartItems.findIndex(item => item._id === product._id);
+
+    if (itemIndex > -1) {
+      cartItems[itemIndex].quantity += 1;
     } else {
-      this.cart.push({ ...product, quantity: 1 });
+      cartItems.push({ ...product, quantity: 1 });
     }
-    this.saveCartToLocalStorage();
+
+    // Update the cart in localStorage
+    localStorage.setItem(this.CART_KEY, JSON.stringify(cartItems));
   }
 
-  // Decrease quantity or remove the product if quantity is 1
   decreaseQuantity(product: any): void {
-    const existingProduct = this.cart.find(item => item._id === product._id);
-    if (existingProduct) {
-      if (existingProduct.quantity > 1) {
-        existingProduct.quantity -= 1; // Decrease quantity if greater than 1
-      } else {
-        this.removeProduct(product._id); // Remove the product if quantity is 1
+    const cartItems = this.getCartItems();
+    const itemIndex = cartItems.findIndex(item => item._id === product._id);
+
+    if (itemIndex > -1) {
+      cartItems[itemIndex].quantity -= 1;
+      if (cartItems[itemIndex].quantity <= 0) {
+        cartItems.splice(itemIndex, 1);
       }
     }
-    this.saveCartToLocalStorage();
+
+    // Update the cart in localStorage
+    localStorage.setItem(this.CART_KEY, JSON.stringify(cartItems));
   }
 
-  // Remove product from the cart
   removeProduct(productId: string): void {
-    this.cart = this.cart.filter(item => item._id !== productId);
-    this.saveCartToLocalStorage();
+    const cartItems = this.getCartItems();
+    const updatedCart = cartItems.filter(item => item._id !== productId);
+
+    // Update the cart in localStorage
+    localStorage.setItem(this.CART_KEY, JSON.stringify(updatedCart));
   }
 
-  // Get the current cart items
-  getCartItems(): any[] {
-    return this.cart;
-  }
-
-  // Clear the cart
   clearCart(): void {
-    this.cart = [];
-    this.saveCartToLocalStorage;
+    // Clear the cart in localStorage
+    localStorage.removeItem(this.CART_KEY);
   }
 }

@@ -1,22 +1,28 @@
-<h1>Your Cart</h1>
-<div *ngIf="cartItems.length === 0">
-  <p>Your cart is empty.</p>
-</div>
+<div class="cart-container">
+  <h1>Your Cart</h1>
 
-<div *ngFor="let item of cartItems" class="cart-item">
-  <img [src]="item.imageUrl" alt="{{ item.name }}" class="product-icon" />
-  <div class="cart-item-details">
-    <h2>{{item.name}}</h2>
-    <p>Individual Kit Price: €{{item.price}}</p>
-    <p>Quantity: {{item.quantity}}</p>
-    <button (click)="increaseQuantity(item)">+</button>
-    <button (click)="decreaseQuantity(item)">-</button>
-    <button (click)="removeProduct(item._id)">Remove</button>
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    <p>Your cart is empty.</p>
   </div>
-</div>
 
-<div *ngIf="cartItems.length > 0" class="cart-total">
-  <p>Total Price: €{{totalPrice}}</p>
-  <button (click)="proceedToCheckout()">Proceed to Checkout</button>
-  <button (click)="clearCart()">Clear Cart</button>
+  <div *ngFor="let item of cartItems" class="cart-item">
+    <img [src]="item.imageUrl" alt="{{ item.name }}" class="product-icon" />
+    <div class="cart-item-details">
+      <h2>{{ item.name }}</h2>
+      <div class="cart-actions">
+        <button class="btn" (click)="decreaseQuantity(item)">-</button>
+        <span class="quantity-display">{{ item.quantity }}</span>
+        <button class="btn" (click)="increaseQuantity(item)">+</button>
+      </div>
+      <button class="btn remove-btn" (click)="removeProduct(item._id)">Remove</button>
+    </div>
+  </div>
+
+  <div *ngIf="cartItems.length > 0" class="cart-total">
+    <p>Total Price: €{{ totalPrice }}</p>
+    <div class="cart-total-actions">
+      <button class="btn primary-btn" (click)="proceedToCheckout()">Proceed to Checkout</button>
+      <button class="btn secondary-btn" (click)="clearCart()">Clear Cart</button>
+    </div>
+  </div>
 </div>
