@@ -17,5 +17,6 @@
 
 <div *ngIf="cartItems.length > 0" class="cart-total">
   <p>Total Price: €{{totalPrice}}</p>
+  <button (click)="proceedToCheckout()">Proceed to Checkout</button>
   <button (click)="clearCart()">Clear Cart</button>
 </div>
