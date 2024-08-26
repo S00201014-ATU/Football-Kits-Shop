@@ -1,6 +1,8 @@
-<h1>Edit Product</h1>
+<div *ngIf="!productExists" class="product-not-found">
+  <h2>Product does not exist</h2>
+</div>
 
-<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+<form *ngIf="productExists" #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
   <div>
     <label for="name">Product Name:</label>
     <input type="text" id="name" name="name" [(ngModel)]="productData.name" required #nameInput="ngModel" />

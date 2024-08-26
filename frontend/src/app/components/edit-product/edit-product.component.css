@@ -67,3 +67,11 @@ button:not([disabled]):hover {
   color: #000;
   font-size: 0.9em;
 }
+
+.product-not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}

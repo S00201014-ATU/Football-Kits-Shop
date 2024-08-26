@@ -1,8 +1,10 @@
 <div class="cart-container">
-  <h1>Your Cart</h1>
-
   <div *ngIf="cartItems.length === 0" class="empty-cart">
     <p>Your cart is empty.</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
   </div>
 
   <div *ngFor="let item of cartItems" class="cart-item">

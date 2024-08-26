@@ -14,10 +14,29 @@ h1 {
 }
 
 .empty-cart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+/* Error Message Styling */
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 20px;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
   text-align: center;
   font-size: 1.2rem;
-  color: #666;
-  vertical-align: middle;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 /* Cart Item Styling */

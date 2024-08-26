@@ -90,12 +90,18 @@
 
 /* Product Not Found */
 .product-not-found {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.9); /* Optional background for emphasis */
   color: #222;
+  text-align: center;
 }
 
 .product-not-found h2 {

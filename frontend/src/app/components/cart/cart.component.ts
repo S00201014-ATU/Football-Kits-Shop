@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
   totalPrice: string = '0.00'; // Set totalPrice as a string
+  errorMessage: string | null = null; // New property for the error message
 
   constructor(private cartService: CartService, private router: Router) {}
 
@@ -48,7 +49,7 @@ export class CartComponent implements OnInit {
     if (this.cartItems.length > 0) {
       this.router.navigate(['/checkout']);
     } else {
-      alert("Your cart is empty! Please add some products before proceeding to the checkout.");
+      this.displayError("Your cart is empty! Please add some products before proceeding to the checkout.");
     }
   }
 
@@ -67,5 +68,15 @@ export class CartComponent implements OnInit {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
+  }
+
+  // New method to display error message
+  private displayError(message: string): void {
+    this.errorMessage = message;
+
+    // Clear the error message after a few seconds
+    setTimeout(() => {
+      this.errorMessage = null;
+    }, 3000);  // Error message will disappear after 3 seconds
   }
 }

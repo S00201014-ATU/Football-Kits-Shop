@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrl: './edit-product.component.css'
+  styleUrls: ['./edit-product.component.css']
 })
 export class EditProductComponent implements OnInit {
   productId: string = '';
@@ -20,6 +20,7 @@ export class EditProductComponent implements OnInit {
       europeanCompetition: ''
     }
   };
+  productExists: boolean = false; // New property to track if the product exists
 
   constructor(
     private route: ActivatedRoute,
@@ -46,12 +47,17 @@ export class EditProductComponent implements OnInit {
     // Use hardcoded backend URL
     this.http.get(`http://localhost:3000/api/products/${this.productId}`).subscribe(
       (response: any) => {
-        console.log('Product Data Loaded:', response);
-        this.productData = response;
+        if (response) {
+          console.log('Product Data Loaded:', response);
+          this.productData = response;
+          this.productExists = true; // Set productExists to true if data is found
+        } else {
+          this.productExists = false; // No product data returned
+        }
       },
       (error) => {
-        alert('Failed to load product data.');
-        console.error(error);
+        this.productExists = false; // Error occurred, treat as product not existing
+        console.error('Error loading product data:', error);
       }
     );
   }
