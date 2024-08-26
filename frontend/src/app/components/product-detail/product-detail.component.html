@@ -1,14 +1,25 @@
-<div *ngIf="product" class="product-detail">
-  <img [src]="product.imageUrl" alt="{{ product.name }}" />
+<div *ngIf="product; else notFound" class="product-detail">
+  <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-img" />
   <h1>{{ product.name }}</h1>
   <p>{{ product.description }}</p>
-  <p>Price: €{{ product.price }}</p>
-  <p>League: {{ product.tags.league }}</p>
-  <p>Manufacturer: {{ product.tags.manufacturer }}</p>
-  <p>European Competition: {{ product.tags.europeanCompetition }}</p>
+  <p class="price">Price: €{{ product.price }}</p>
+
+  <!-- Tags as pills -->
+  <div class="tags-container">
+    <span class="tag" [ngStyle]="{ 'background-color': tagColor }">{{ product.tags.league }}</span>
+    <span class="tag" [ngStyle]="{ 'background-color': tagColor }">{{ product.tags.manufacturer }}</span>
+    <span class="tag" [ngStyle]="{ 'background-color': tagColor }">{{ product.tags.europeanCompetition }}</span>
+  </div>
 
   <!-- Only show the "Add to Cart" button if the user is logged in -->
-  <button *ngIf="isLoggedIn" (click)="addToCart(product)">
+  <button *ngIf="isLoggedIn" class="add-to-cart" (click)="addToCart(product)">
     Add to Cart
   </button>
 </div>
+
+<ng-template #notFound>
+  <div class="product-not-found">
+    <h2>Product Not Found</h2>
+    <p>We couldn't find the product you're looking for. Please check the URL or browse our catalog for more products.</p>
+  </div>
+</ng-template>

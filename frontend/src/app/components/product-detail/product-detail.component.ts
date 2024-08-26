@@ -12,8 +12,9 @@ import { Subscription } from 'rxjs';
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
-  product: any;
+  product: any | null = null;
   isLoggedIn: boolean = false;
+  tagColor: string = '#007bff';  // Set a single color for all pills
   private authSubscription: Subscription | undefined;
 
   constructor(
@@ -26,9 +27,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Get product ID from route
     const productId = this.route.snapshot.paramMap.get('id');
+
+    // Fetch the products from the ProductService
     this.productService.getProducts().subscribe((products) => {
-      // Find the product by ID
-      this.product = products.find((product) => product._id === productId);
+      this.product = products.find((product) => product._id === productId) || null;
+
+      if (this.product) {
+        this.tagColor = '#f2b450';
+      }
     });
 
     // Subscribe to authentication status
@@ -51,7 +57,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       alert('You must be logged in to add products to the cart!');
     }
   }
-
 
   ngOnDestroy(): void {
     if (this.authSubscription) {
