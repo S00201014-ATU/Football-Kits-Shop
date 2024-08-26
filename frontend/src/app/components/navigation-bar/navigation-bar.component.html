@@ -6,6 +6,12 @@
 
   <!-- Right Side: All Other Navigation Links -->
    <div>
+    <a
+      routerLink="/"
+      class="navbar-item"
+      [ngClass]="{'active': isActive('/')}"
+    >Products</a>
+
      <a
       *ngIf="isStaff"
       routerLink="/add-product"
