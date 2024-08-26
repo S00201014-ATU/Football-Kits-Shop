@@ -3,23 +3,35 @@
 <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
   <div>
     <label for="name">Product Name:</label>
-    <input type="text" id="name" name="name" ngModel required />
+    <input type="text" id="name" name="name" ngModel required #nameInput="ngModel" />
+    <div *ngIf="nameInput.invalid && nameInput.touched" class="error">
+      Product Name is required.
+    </div>
   </div>
   <div>
     <label for="price">Price:</label>
-    <input type="number" id="price" name="price" ngModel required />
+    <input type="number" id="price" name="price" ngModel required #priceInput="ngModel" />
+    <div *ngIf="priceInput.invalid && priceInput.touched" class="error">
+      Price is required.
+    </div>
   </div>
   <div>
     <label for="imageUrl">Image URL:</label>
-    <input type="text" id="imageUrl" name="imageUrl" ngModel required />
+    <input type="text" id="imageUrl" name="imageUrl" ngModel required #imageUrlInput="ngModel" />
+    <div *ngIf="imageUrlInput.invalid && imageUrlInput.touched" class="error">
+      Image URL is required.
+    </div>
   </div>
   <div>
     <label for="description">Description:</label>
-    <textarea id="description" name="description" ngModel required></textarea>
+    <textarea id="description" name="description" ngModel required #descriptionInput="ngModel"></textarea>
+    <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error">
+      Description is required.
+    </div>
   </div>
   <div>
     <label for="league">League:</label>
-    <select id="league" name="league" ngModel required>
+    <select id="league" name="league" ngModel required #leagueInput="ngModel">
       <option value="Ligue 1">Ligue 1</option>
       <option value="Bundesliga">Bundesliga</option>
       <option value="Serie A">Serie A</option>
@@ -27,10 +39,13 @@
       <option value="Premier League">Premier League</option>
       <option value="Other Leagues">Other Leagues</option>
     </select>
+    <div *ngIf="leagueInput.invalid && leagueInput.touched" class="error">
+      League is required.
+    </div>
   </div>
   <div>
     <label for="manufacturer">Manufacturer:</label>
-    <select id="manufacturer" name="manufacturer" ngModel required>
+    <select id="manufacturer" name="manufacturer" ngModel required #manufacturerInput="ngModel">
       <option value="Adidas">Adidas</option>
       <option value="Nike">Nike</option>
       <option value="Puma">Puma</option>
@@ -39,16 +54,22 @@
       <option value="O'Neills">O'Neills</option>
       <option value="Other Manufacturers">Other Manufacturers</option>
     </select>
+    <div *ngIf="manufacturerInput.invalid && manufacturerInput.touched" class="error">
+      Manufacturer is required.
+    </div>
   </div>
   <div>
     <label for="competition">European Competition:</label>
-    <select id="competition" name="competition" ngModel required>
+    <select id="competition" name="competition" ngModel required #competitionInput="ngModel">
       <option value="Champions League">Champions League</option>
       <option value="Europa League">Europa League</option>
       <option value="Conference League">Conference League</option>
       <option value="No European Football">No European Football</option>
     </select>
+    <div *ngIf="competitionInput.invalid && competitionInput.touched" class="error">
+      European Competition is required.
+    </div>
   </div>
 
-  <button type="submit" [disabled]="!productForm.valid">Add Product</button>
+  <button type="submit" [ngClass]="{'hidden': !productForm.valid}">Add Product</button>
 </form>
