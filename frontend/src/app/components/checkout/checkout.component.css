@@ -86,6 +86,14 @@
   font-size: 16px;
 }
 
+button[disabled],
+button.disabled {
+  background-color: grey;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
 .checkout-form button:hover {
   background-color: #218838;
 }

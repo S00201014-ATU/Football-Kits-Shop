@@ -12,16 +12,30 @@ export class CheckoutComponent implements OnInit {
   cartItems: any[] = [];
   totalPrice: string = '0.00';
   cardNumber: string = '';
+  cardNumberInvalidLength: boolean = false;
+  cardNumberTouchedAndBlurred: boolean = false; // Track if the user started typing and left the field
+  cvv: string = '';
+  cvvInvalidLength: boolean = false;
+  cvvTouchedAndBlurred: boolean = false; // Track CVV input interactions
   months: string[] = [];
   years: string[] = [];
+  selectedMonth: string = '';
   selectedYear: string = '';
-  currentMonth: number = new Date().getMonth() + 1; // JavaScript months are zero-based (0-11), so we add 1
+  currentMonth: number = new Date().getMonth() + 1;
   currentYear: number = new Date().getFullYear();
+  forename: string = '';
+  surname: string = '';
+  town: string = '';
+  country: string = '';
+  cardName: string = '';
+  addressLine1: string = '';
+  addressLine2: string = '';
+  phoneNumber: string = '';
 
   constructor(
     private cartService: CartService,
     private router: Router,
-    private http: HttpClient // Add HttpClient to send emails
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -31,10 +45,9 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    // Get cart items for the order summary
     this.calculateTotalPrice();
     this.generateYears();
-    this.updateAvailableMonths(); // Generate the initial month options
+    this.updateAvailableMonths();
   }
 
   calculateTotalPrice(): void {
@@ -49,12 +62,57 @@ export class CheckoutComponent implements OnInit {
   }
 
   // Automatically formats the card number into groups of four, limiting to 16 digits
-  formatCardNumber(): void {
-    this.cardNumber = this.cardNumber.replace(/\D/g, '').substring(0, 16);
-    this.cardNumber = this.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+  formatCardNumber(event: any): void {
+    let input = event.target.value;
+
+    // Remove all non-numeric characters
+    input = input.replace(/\D/g, '');
+
+    // Format the card number in groups of 4 digits
+    if (input.length > 0) {
+      input = input.match(/.{1,4}/g)?.join(' ') || input;
+    }
+
+    this.cardNumber = input;
+    event.target.value = input;
+
+    // Reset touched-and-blurred flag when typing
+    this.cardNumberTouchedAndBlurred = false;
   }
 
-  // Generates an array of years starting from the current year for the expiration date dropdown
+  // Validate the card number length
+  validateCardNumberLength(): void {
+    this.cardNumberInvalidLength = this.cardNumber.replace(/\s+/g, '').length !== 16;
+  }
+
+  // Trigger validation when the field loses focus
+  onCardNumberBlur(): void {
+    this.validateCardNumberLength();
+    if (this.cardNumber.length > 0) {
+      this.cardNumberTouchedAndBlurred = true;
+    }
+  }
+
+  // CVV validation logic
+  validateCvvLength(): void {
+    this.cvvInvalidLength = this.cvv.length !== 3;
+  }
+
+  onCvvBlur(): void {
+    this.validateCvvLength();
+    if (this.cvv.length > 0) {
+      this.cvvTouchedAndBlurred = true;
+    }
+  }
+
+  formatCvv(event: any): void {
+    let input = event.target.value;
+    input = input.replace(/\D/g, ''); // Only allow numbers
+    this.cvv = input;
+    event.target.value = input;
+    this.cvvTouchedAndBlurred = false; // Reset touched flag while typing
+  }
+
   generateYears(): void {
     const currentYear = new Date().getFullYear();
     for (let i = 0; i < 10; i++) {
@@ -62,27 +120,79 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
-  // Updates the available months based on the selected year
   updateAvailableMonths(): void {
     this.months = [];
-
-    // If the selected year is the current year, limit months to those >= current month
     if (this.selectedYear === this.currentYear.toString()) {
       for (let i = this.currentMonth; i <= 12; i++) {
-        this.months.push(i.toString().padStart(2, '0')); // Format as 01, 02, etc.
+        this.months.push(i.toString().padStart(2, '0'));
       }
     } else {
-      // If it's a future year, all months are available
       for (let i = 1; i <= 12; i++) {
         this.months.push(i.toString().padStart(2, '0'));
       }
     }
   }
 
+  preventInvalidCharacters(event: KeyboardEvent): void {
+    const charCode = event.charCode;
+    if (
+      (charCode >= 65 && charCode <= 90) || // Uppercase A-Z
+      (charCode >= 97 && charCode <= 122) || // Lowercase a-z
+      charCode === 32 || // Space
+      charCode === 39 || // Apostrophe
+      (charCode >= 192 && charCode <= 255) // Accented characters (À-ž)
+    ) {
+      return;
+    }
+    event.preventDefault();
+  }
+
+  sanitizeForename(): void {
+    const sanitizedForename = this.forename.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    const sanitizedSurname = this.surname.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    const sanitizedTown = this.town.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    const sanitizedCountry = this.country.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    const sanitizedCardName = this.cardName.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.forename = sanitizedForename.replace(/\s+/g, ' ').trim();
+    this.surname = sanitizedSurname.replace(/\s+/g, ' ').trim();
+    this.town = sanitizedTown.replace(/\s+/g, ' ').trim();
+    this.country = sanitizedCountry.replace(/\s+/g, ' ').trim();
+    this.cardName = sanitizedCardName.replace(/\s+/g, ' ').trim();
+  }
+
+  preventInvalidAddressCharacters(event: KeyboardEvent): void {
+    const charCode = event.charCode;
+    if (
+      (charCode >= 48 && charCode <= 57) || // Allow numbers
+      (charCode >= 65 && charCode <= 90) || // Uppercase A-Z
+      (charCode >= 97 && charCode <= 122) || // Lowercase a-z
+      charCode === 32 || // Space
+      charCode === 39 || // Apostrophe
+      (charCode >= 192 && charCode <= 255) // Accented characters (À-ž)
+    ) {
+      return;
+    }
+    event.preventDefault();
+  }
+
+  sanitizeAddress(): void {
+    const sanitizedAL1 = this.addressLine1.replace(/[^a-zA-ZÀ-ž0-9\s']/g, '');
+    const sanitizedAL2 = this.addressLine2.replace(/[^a-zA-ZÀ-ž0-9\s']/g, '');
+    this.addressLine1 = sanitizedAL1.replace(/\s+/g, ' ').trim();
+    this.addressLine2 = sanitizedAL2.replace(/\s+/g, ' ').trim();
+  }
+
+  sanitizePhone(event: any): void {
+    // Update phoneNumber, not cardNumber
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+    this.phoneNumber = event.target.value;
+  }
+
   // Handle the form submission for placing the order
   onSubmit(form: any): void {
-    if (form.valid) {
-      // Ensure the total price is a valid number without commas
+    this.validateCardNumberLength(); // Validate card length on submission
+
+    if (form.valid && !this.cardNumberInvalidLength) {
       const formattedTotalPrice = parseFloat(this.totalPrice.replace(/,/g, ''));
 
       const orderData = {
@@ -98,7 +208,6 @@ export class CheckoutComponent implements OnInit {
         totalPrice: formattedTotalPrice,
       };
 
-      // Send orderData to the backend
       this.http.post('http://localhost:3000/api/checkout/orders', orderData)
         .subscribe(
           (response: any) => {
@@ -115,5 +224,4 @@ export class CheckoutComponent implements OnInit {
       alert('Please fill out all required fields correctly.');
     }
   }
-
 }
