@@ -25,7 +25,13 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cartItems = this.cartService.getCartItems(); // Get cart items for the order summary
+    this.cartItems = this.cartService.getCartItems();
+
+    if (this.cartItems.length === 0) {
+      return;
+    }
+
+    // Get cart items for the order summary
     this.calculateTotalPrice();
     this.generateYears();
     this.updateAvailableMonths(); // Generate the initial month options
