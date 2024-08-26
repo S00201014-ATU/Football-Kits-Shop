@@ -1,3 +1,11 @@
+/* General styling for the page */
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 2rem;
+  color: #333;
+}
+
 form {
   max-width: 600px;
   margin: 0 auto;
@@ -49,4 +57,13 @@ button[disabled] {
 
 button:not([disabled]):hover {
   background-color: #0056b3;
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  color: #000;
+  font-size: 0.9em;
 }
