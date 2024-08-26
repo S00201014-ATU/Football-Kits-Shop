@@ -1,23 +1,26 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd, Event } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+import { filter } from 'rxjs/operators';
+
 @Component({
   selector: 'app-navigation-bar',
   templateUrl: './navigation-bar.component.html',
-  styleUrl: './navigation-bar.component.css'
+  styleUrls: ['./navigation-bar.component.css']
 })
 export class NavigationBarComponent implements OnInit {
   isLoggedIn: boolean = false;
   isStaff: boolean = false;
+  currentRoute: string = '';
 
   constructor(
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
-    private cdr: ChangeDetectorRef,  // Inject ChangeDetectorRef
-    private authService: AuthService  // Inject AuthService
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -25,12 +28,22 @@ export class NavigationBarComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
       if (this.isLoggedIn) {
-        this.checkUserRole(); // Check the role when the user is logged in
+        this.checkUserRole();
       } else {
-        this.isStaff = false; // Reset staff status on logout
+        this.isStaff = false;
       }
-      this.cdr.detectChanges();  // Manually trigger change detection
+      this.cdr.detectChanges();
     });
+
+    // Track the current route
+    this.router.events
+      .pipe(
+        filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.currentRoute = event.urlAfterRedirects;
+        this.cdr.detectChanges(); // Trigger change detection
+      });
   }
 
   checkUserRole(): void {
@@ -38,17 +51,21 @@ export class NavigationBarComponent implements OnInit {
       const token = localStorage.getItem('token');
       if (token) {
         const decodedToken: any = jwtDecode(token);
-        this.isStaff = decodedToken.role === 'staff';  // Set the staff flag based on the decoded token
+        this.isStaff = decodedToken.role === 'staff';
       }
     }
   }
 
   handleAuthClick(): void {
     if (this.isLoggedIn) {
-      this.authService.logout(); // Use the AuthService to handle logout
-      this.router.navigate(['/login']); // Redirect to login page after logout
+      this.authService.logout();
+      this.router.navigate(['/login']);
     } else {
-      this.router.navigate(['/login']); // Redirect to login page if not logged in
+      this.router.navigate(['/login']);
     }
+  }
+
+  isActive(route: string): boolean {
+    return this.currentRoute === route || (route === '/login' && this.currentRoute === '/login');
   }
 }

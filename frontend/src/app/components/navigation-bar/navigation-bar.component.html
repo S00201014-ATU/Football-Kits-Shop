@@ -1,21 +1,37 @@
 <nav class="navbar">
-  <div class="navbar-brand">
-    <a routerLink="/" class="navbar-item">Football Kits Store</a>
+  <!-- Left Side: User Icon -->
+  <div class="navbar-left">
+    <img src="https://cdn-icons-png.flaticon.com/512/1031/1031499.png" alt="User Icon" class="user-icon" routerLink="/" />
   </div>
-  <div class="navbar-menu">
-    <a routerLink="/" class="navbar-item">Products</a>
 
-    <!-- Add Product Link: Only visible to staff users -->
-    <a *ngIf="isStaff" routerLink="/add-product" class="navbar-item">Add Product</a>
+  <!-- Right Side: All Other Navigation Links -->
+   <div>
+     <a
+      *ngIf="isStaff"
+      routerLink="/add-product"
+      class="navbar-item"
+      [ngClass]="{'active': isActive('/add-product')}"
+    >Add Product</a>
 
-    <!-- Register Link: Only visible to logged-out users -->
-    <a *ngIf="!isLoggedIn" routerLink="/register" class="navbar-item">Register</a>
+    <a
+      *ngIf="isLoggedIn"
+      routerLink="/cart"
+      class="navbar-item"
+      [ngClass]="{'active': isActive('/cart')}"
+    >Cart </a>
 
-        <!-- Cart and Checkout Links: Visible to logged-in users (both staff and customers) -->
-        <a *ngIf="isLoggedIn" routerLink="/cart" class="navbar-item">Cart</a>
-        <a *ngIf="isLoggedIn" routerLink="/checkout" class="navbar-item">Checkout</a>
+    <a
+      *ngIf="isLoggedIn"
+      routerLink="/checkout"
+      class="navbar-item"
+      [ngClass]="{'active': isActive('/checkout')}"
+    >Checkout</a>
 
-    <!-- Login/Logout Link: Changes based on login status -->
-    <a (click)="handleAuthClick()" class="navbar-item">{{ isLoggedIn ? 'Logout' : 'Login' }}</a>
+    <a
+      routerLink="/login"
+      class="navbar-item"
+      [ngClass]="{'active': isActive('/login')}"
+      (click)="handleAuthClick()"
+    >{{ isLoggedIn ? 'Logout' : 'Login' }}</a>
   </div>
 </nav>

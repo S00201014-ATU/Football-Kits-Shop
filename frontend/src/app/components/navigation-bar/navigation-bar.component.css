@@ -1,17 +1,67 @@
+/* Basic Navbar Styling */
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Space between left (icon) and right (links) */
+  align-items: center;
   background-color: #333;
-  padding: 1rem;
+  padding: 1rem 2rem;
   color: white;
+  font-family: Arial, sans-serif;
 }
 
-.nabar-item {
+/* Left Section: User Icon */
+.navbar-left {
+  flex-grow: 0;
+}
+
+.user-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer; /* Add pointer cursor when hovering over the image */
+}
+
+/* Right Section: Navigation Links */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Navbar Items Styling */
+.navbar-item {
   color: white;
   text-decoration: none;
-  margin-right: 20px;
+  margin-left: 20px;
+  font-size: 1rem;
+  cursor: pointer; /* Ensures the pointer cursor on hover */
 }
 
-.nabar-item:hover {
-  text-decoration: underline;
+.navbar-item:hover {
+  color: grey;
+}
+
+/* Active Navbar Item */
+.navbar-item.active {
+  font-weight: bold;
+  color: grey; /* Highlight color for active route */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-right {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-item {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
 }
