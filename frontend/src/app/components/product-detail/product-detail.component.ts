@@ -39,12 +39,19 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   addToCart(product: any): void {
     if (this.isLoggedIn) {
-      this.cartService.addToCart(product);
-      alert(`${product.name} has been added to the cart!`);
+      const existingProduct = this.cartService.getCartItems().find(item => item._id === product._id);
+      if (existingProduct) {
+        this.cartService.addToCart(product);
+        alert(`Another ${product.name} has been added to the cart!`);
+      } else {
+        this.cartService.addToCart(product);
+        alert(`${product.name} has been added to the cart!`);
+      }
     } else {
       alert('You must be logged in to add products to the cart!');
     }
   }
+
 
   ngOnDestroy(): void {
     if (this.authSubscription) {
