@@ -9,6 +9,10 @@ import { AuthService } from './../../services/auth.service';
   styleUrls: ['./login.component.css'] // Changed 'styleUrl' to 'styleUrls' (correct Angular syntax)
 })
 export class LoginComponent {
+
+  username: string = '';
+  password: string = '';
+
   constructor(
     private http: HttpClient,
     private router: Router,

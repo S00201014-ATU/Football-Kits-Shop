@@ -1,16 +1,36 @@
 <h1>Login</h1>
 
-<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="login-form">
+<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="login-form" novalidate>
   <!-- Username Input -->
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{ 'has-error': loginForm.submitted && !loginForm.form.controls['username'].valid }">
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username" ngModel required />
+    <input
+      type="text"
+      id="username"
+      name="username"
+      [(ngModel)]="username"
+      required
+      #usernameInput="ngModel"
+    />
+    <div class="error-message" *ngIf="loginForm.submitted && usernameInput.invalid">
+      Username is required.
+    </div>
   </div>
 
   <!-- Password Input -->
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{ 'has-error': loginForm.submitted && !loginForm.form.controls['password'].valid }">
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password" ngModel required />
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+      #passwordInput="ngModel"
+    />
+    <div class="error-message" *ngIf="loginForm.submitted && passwordInput.invalid">
+      Password is required.
+    </div>
   </div>
 
   <!-- Forgot Password Link -->
@@ -18,12 +38,18 @@
     <a routerLink="/forgot-password">Forgot Password?</a>
   </div>
 
-  <!-- Submit Button -->
-  <button type="submit" [disabled]="!loginForm.valid">Login</button>
-</form>
+  <!-- Registration Prompt -->
+  <p class="register-link">
+    Don't have an account?
+    <a routerLink="/register">Register here</a>
+  </p>
 
-<!-- Registration Prompt -->
-<p class="register-link">
-  Don't have an account?
-  <a routerLink="/register">Register here</a>
-</p>
+  <!-- Submit Button -->
+  <button
+    type="submit"
+    [hidden]="!loginForm.valid"
+    [disabled]="!loginForm.valid"
+  >
+    Login
+  </button>
+</form>
