@@ -1,9 +1,8 @@
 <!-- Display message if the cart is empty -->
-<div *ngIf="cartItems.length === 0" class="empty-cart-message">
+<div *ngIf="cartItems.length === 0" class="empty-checkout">
   <h2>Checkout Closed</h2>
   <p>Please add items to your cart first.</p>
 </div>
-
 <!-- Display checkout form and order summary if the cart has items -->
 <div *ngIf="cartItems.length > 0" class="checkout-container">
   <div class="order-summary">
@@ -16,10 +15,8 @@
     </div>
     <h3>Total: €{{ totalPrice }}</h3>
   </div>
-
   <!-- Checkout Form Section -->
   <form #checkoutForm="ngForm" (ngSubmit)="onSubmit(checkoutForm)" class="checkout-form">
-
     <!-- Personal Information -->
     <h2>Personal Information</h2>
     <div>
@@ -38,7 +35,6 @@
         Forename is required.
       </div>
     </div>
-
     <div>
       <label for="surname">Surname:</label>
       <input
@@ -55,7 +51,6 @@
         Surname is required.
       </div>
     </div>
-
     <!-- Shipping Details -->
     <h2>Shipping Details</h2>
     <div>
@@ -122,7 +117,6 @@
         Country is required.
       </div>
     </div>
-
     <!-- Contact Information -->
     <h2>Contact Information</h2>
     <div>
@@ -160,7 +154,6 @@
         <div *ngIf="phoneInput.errors?.['pattern']">Phone number must be 11 digits.</div>
       </div>
     </div>
-
     <!-- Card Details -->
     <h2>Card Details</h2>
     <div>
@@ -199,10 +192,6 @@
         Card number must be 16 digits (without spaces).
       </div>
     </div>
-
-
-
-
     <div>
       <label for="expirationYear">Expiration Year:</label>
       <select
@@ -219,7 +208,6 @@
         Expiration year is required.
       </div>
     </div>
-
     <div>
       <label for="expirationMonth">Expiration Month:</label>
       <select
@@ -235,7 +223,6 @@
         Expiration month is required.
       </div>
     </div>
-
     <div>
       <label for="cvv">CVV:</label>
       <input
@@ -256,8 +243,6 @@
         CVV must be 3 digits.
       </div>
     </div>
-
-
     <!-- Submit Button (hidden by default, shown when form is valid) -->
 <div *ngIf="checkoutForm.valid">
   <button
@@ -266,6 +251,5 @@
     Place Order
   </button>
 </div>
-
   </form>
 </div>
