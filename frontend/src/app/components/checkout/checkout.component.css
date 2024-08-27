@@ -1,9 +1,12 @@
 .checkout-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  display: block; /* Change from flex to block to allow vertical stacking */
   margin-top: 20px;
-  align-items: flex-start;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.checkout-price {
+  text-align: right;
 }
 
 .order-summary {
@@ -11,20 +14,19 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  flex-grow: 0;
-  flex-shrink: 0;
+  margin-bottom: 20px; /* Add margin to separate from the form */
 }
 
 .checkout-form {
-  width: 45%;
+  width: 100%; /* Full width since it's now below the order summary */
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  flex-grow: 1;
 }
 
-.order-summary h2, .checkout-form h2 {
+.order-summary h2,
+.checkout-form h2 {
   margin-bottom: 20px;
   font-size: 1.8em;
 }
@@ -59,7 +61,8 @@
   font-weight: bold;
 }
 
-.checkout-form input, .checkout-form select {
+.checkout-form input,
+.checkout-form select {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -105,4 +108,3 @@ button.disabled {
   flex-direction: column;
   text-align: center;
 }
-

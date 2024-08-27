@@ -3,8 +3,10 @@
   <h2>Checkout Closed</h2>
   <p>Please add items to your cart first.</p>
 </div>
+
 <!-- Display checkout form and order summary if the cart has items -->
 <div *ngIf="cartItems.length > 0" class="checkout-container">
+  <!-- Order Summary Section on Top -->
   <div class="order-summary">
     <h2>Your Order</h2>
     <div *ngFor="let item of cartItems" class="order-item">
@@ -13,9 +15,10 @@
         <h3>{{ item.quantity }} x {{ item.name }}</h3>
       </div>
     </div>
-    <h3>Total: €{{ totalPrice }}</h3>
+    <h3 class="checkout-price">Total: €{{ totalPrice }}</h3>
   </div>
-  <!-- Checkout Form Section -->
+
+  <!-- Checkout Form Section Below Order Summary -->
   <form #checkoutForm="ngForm" (ngSubmit)="onSubmit(checkoutForm)" class="checkout-form">
     <!-- Personal Information -->
     <h2>Personal Information</h2>
@@ -244,12 +247,8 @@
       </div>
     </div>
     <!-- Submit Button (hidden by default, shown when form is valid) -->
-<div *ngIf="checkoutForm.valid">
-  <button
-    type="submit"
-  >
-    Place Order
-  </button>
-</div>
+    <div *ngIf="checkoutForm.valid">
+      <button type="submit">Place Order</button>
+    </div>
   </form>
 </div>
