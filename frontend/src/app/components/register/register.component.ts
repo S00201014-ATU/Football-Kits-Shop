@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { API_BASE_URL } from '../../../../api.config';  // Import the correct API URL
+import { API_BASE_URL } from './../../../../api.config';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +15,7 @@ export class RegisterComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-  role: string = '';  // Add role binding
+  role: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -26,12 +26,11 @@ export class RegisterComponent {
 
   preventInvalidCharactersUsernameAndPassword(event: KeyboardEvent): void {
     const charCode = event.charCode;
-    // Allow letters, numbers, and special characters
     if (
+      (charCode >= 48 && charCode <= 57) ||
       (charCode >= 65 && charCode <= 90) || // Uppercase A-Z
       (charCode >= 97 && charCode <= 122) || // Lowercase a-z
-      (charCode >= 192 && charCode <= 255) || // Accented characters (À-ž)
-      (charCode === 39 || charCode === 45 || charCode === 32) // Apostrophe, hyphen, space
+      (charCode >= 192 && charCode <= 255) // Accented characters (À-ž)
     ) {
       return;
     }
@@ -39,7 +38,6 @@ export class RegisterComponent {
   }
 
   sanitizeUsernameAndPassword(): void {
-    // Sanitize username and passwords to remove invalid characters
     const sanitizedUsername = this.username.replace(/[^a-zA-ZÀ-ž\s']/g, '');
     this.username = sanitizedUsername.replace(/\s+/g, ' ').trim();
     const sanitizedPassword1 = this.password.replace(/[^a-zA-ZÀ-ž\s']/g, '');
@@ -51,13 +49,13 @@ export class RegisterComponent {
   onSubmit(form: any): void {
     if (form.valid && !this.passwordMismatch) {
       const userData = {
-        username: this.username, // Ensure data matches ngModel bindings
-        email: this.email,
-        password: this.password,
-        role: this.role,
+        username: form.value.username,
+        email: form.value.email,
+        password: form.value.password,
+        role: form.value.role,
       };
 
-      // Call the register API
+      // Use the new API_BASE_URL from your api.config.ts file
       this.http.post(`${API_BASE_URL}/api/users/register`, userData).subscribe(
         (response: any) => {
           alert('Registration successful!');
@@ -75,8 +73,8 @@ export class RegisterComponent {
 
   // Check password mismatch whenever the confirm password field loses focus
   onConfirmPasswordBlur(form: any): void {
-    if (this.password && this.confirmPassword) {
-      this.passwordMismatch = this.password !== this.confirmPassword;
+    if (form.value.password && form.value.confirmPassword) {
+      this.passwordMismatch = form.value.password !== form.value.confirmPassword;
     }
   }
 
