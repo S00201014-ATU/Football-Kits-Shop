@@ -1,19 +1,22 @@
-
 <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
   <!-- Username Input -->
   <div class="form-group">
     <label for="username">Username</label>
     <input
-        type="text"
-        id="username"
-        name="forename"
-        [(ngModel)]="username"
-        (input)="sanatizeUsernameAndPassword()"
-        (keypress)="preventInvalidCharactersUsernameAndPassword($event)"
-        required
-        placeholder="Enter your username"
-        #forenameInput="ngModel"
-      />
+      type="text"
+      id="username"
+      name="username"
+      [(ngModel)]="username"
+      (input)="handleInput(registerForm)"
+      (keypress)="preventInvalidCharactersUsernameAndPassword($event)"
+      required
+      placeholder="Enter your username"
+      class="form-control"
+      #usernameInput="ngModel"
+    />
+    <div *ngIf="usernameInput.invalid && usernameInput.touched" class="error-message">
+      Username is required.
+    </div>
   </div>
 
   <!-- Email Input -->
@@ -23,15 +26,15 @@
       type="email"
       id="email"
       name="email"
-      ngModel
+      [(ngModel)]="email"
       required
       email
       class="form-control"
       placeholder="Enter your email"
-      #email = "ngModel"
+      #emailInput="ngModel"
     />
-    <div *ngIf="email.invalid" class="error-message">
-      <div *ngIf="email.errors?.['email']">Please enter a valid email address.</div>
+    <div *ngIf="emailInput.invalid && emailInput.touched" class="error-message">
+      <div *ngIf="emailInput.errors?.[email]">Please enter a valid email address.</div>
     </div>
   </div>
 
@@ -48,9 +51,11 @@
       required
       class="form-control"
       placeholder="Enter your password"
-      #forenameInput="ngModel"
+      #passwordInput="ngModel"
     />
-
+    <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error-message">
+      Password is required.
+    </div>
   </div>
 
   <!-- Confirm Password Input -->
@@ -67,7 +72,11 @@
       (blur)="onConfirmPasswordBlur(registerForm)"
       class="form-control"
       placeholder="Confirm your password"
+      #confirmPasswordInput="ngModel"
     />
+    <div *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="error-message">
+      Confirm Password is required.
+    </div>
     <p *ngIf="passwordMismatch" class="error">Passwords do not match!</p>
   </div>
 
@@ -77,15 +86,18 @@
     <select
       id="role"
       name="role"
-      ngModel
+      [(ngModel)]="role"
       required
-      (change)="onInputChange(registerForm)"
       class="form-control"
+      #roleInput="ngModel"
     >
-      <option value="" disabled selected>Select your role</option>
+      <option value="" disabled>Select your role</option>
       <option value="customer">Customer</option>
       <option value="staff">Staff</option>
     </select>
+    <div *ngIf="roleInput.invalid && roleInput.touched" class="error-message">
+      Role is required.
+    </div>
   </div>
 
   <!-- Submit Button -->
@@ -93,7 +105,6 @@
     <button
       type="submit"
       [disabled]="!registerForm.valid || passwordMismatch"
-      *ngIf="allFieldsFilled"
       class="btn-submit"
     >
       Register

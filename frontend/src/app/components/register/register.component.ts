@@ -15,65 +15,68 @@ export class RegisterComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  role: string = '';  // Add role binding
 
   constructor(private http: HttpClient, private router: Router) {}
 
   handleInput(registerForm: any) {
-    this.sanatizeUsernameAndPassword();
+    this.sanitizeUsernameAndPassword();
     this.onInputChange(registerForm);
   }
 
   preventInvalidCharactersUsernameAndPassword(event: KeyboardEvent): void {
     const charCode = event.charCode;
+    // Allow letters, numbers, and special characters
     if (
-      (charCode >= 48 && charCode <= 57) ||
       (charCode >= 65 && charCode <= 90) || // Uppercase A-Z
       (charCode >= 97 && charCode <= 122) || // Lowercase a-z
-      (charCode >= 192 && charCode <= 255) // Accented characters (À-ž)
+      (charCode >= 192 && charCode <= 255) || // Accented characters (À-ž)
+      (charCode === 39 || charCode === 45 || charCode === 32) // Apostrophe, hyphen, space
     ) {
       return;
     }
     event.preventDefault();
   }
 
-  sanatizeUsernameAndPassword(): void {
-    const sanatizedUsername = this.username.replace(/[^a-zA-ZÀ-ž\s']/g, '');
-    this.username = sanatizedUsername.replace(/\s+/g, ' ').trim();
-    const sanatizedPassword1 = this.password.replace(/[^a-zA-ZÀ-ž\s']/g, '');
-    this.password = sanatizedPassword1.replace(/\s+/g, ' ').trim();
-    const sanatizedPassword2 = this.confirmPassword.replace(/[^a-zA-ZÀ-ž\s']/g, '');
-    this.confirmPassword = sanatizedPassword2.replace(/\s+/g, ' ').trim();
+  sanitizeUsernameAndPassword(): void {
+    // Sanitize username and passwords to remove invalid characters
+    const sanitizedUsername = this.username.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.username = sanitizedUsername.replace(/\s+/g, ' ').trim();
+    const sanitizedPassword1 = this.password.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.password = sanitizedPassword1.replace(/\s+/g, ' ').trim();
+    const sanitizedPassword2 = this.confirmPassword.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.confirmPassword = sanitizedPassword2.replace(/\s+/g, ' ').trim();
   }
 
   onSubmit(form: any): void {
     if (form.valid && !this.passwordMismatch) {
       const userData = {
-        username: form.value.username,
-        email: form.value.email,
-        password: form.value.password,
-        role: form.value.role,
+        username: this.username, // Ensure data matches ngModel bindings
+        email: this.email,
+        password: this.password,
+        role: this.role,
       };
 
-      this.http.post(`${API_BASE_URL}/api/users/register`, userData)
-      .subscribe(
-          (response: any) => {
-            alert('Registration successful!');
-            form.resetForm();
-            this.router.navigate(['/login']);
-          },
-          (error) => {
-            const errorMessage = error.error?.message || 'Registration failed';
-            alert(errorMessage);
-            console.error(error);
-          }
-        );
+      // Call the register API
+      this.http.post(`${API_BASE_URL}/api/users/register`, userData).subscribe(
+        (response: any) => {
+          alert('Registration successful!');
+          form.resetForm();
+          this.router.navigate(['/login']);
+        },
+        (error) => {
+          const errorMessage = error.error?.message || 'Registration failed';
+          alert(errorMessage);
+          console.error(error);
+        }
+      );
     }
   }
 
   // Check password mismatch whenever the confirm password field loses focus
   onConfirmPasswordBlur(form: any): void {
-    if (form.value.password && form.value.confirmPassword) {
-      this.passwordMismatch = form.value.password !== form.value.confirmPassword;
+    if (this.password && this.confirmPassword) {
+      this.passwordMismatch = this.password !== this.confirmPassword;
     }
   }
 
