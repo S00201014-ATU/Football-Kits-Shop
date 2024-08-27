@@ -11,15 +11,19 @@ router.post('/register', async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
 
+    console.log("Received registration data:", req.body);
+
     // Check if the email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.error("Email already in use:", email);
       return res.status(400).json({ message: 'Email already in use' });
     }
 
     // Check if the username already exists
     const existingUsername = await User.findOne({ username });
     if (existingUsername) {
+      console.error("Username already in use:", username);
       return res.status(400).json({ message: 'Username already in use' });
     }
 
@@ -29,6 +33,8 @@ router.post('/register', async (req, res) => {
     // Create a new user and save to the database
     const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
+
+    console.log("User saved to database:", newUser);
 
     // Send the welcome email only if the user is a customer
     if (role === 'customer') {
@@ -43,11 +49,13 @@ router.post('/register', async (req, res) => {
 
       // Email content for the welcome email
       const mailOptions = {
-        from: '"Football Kits Shop" <' + process.env.OUTLOOK_EMAIL + '>',
+        from: `"Football Kits Shop" <${process.env.OUTLOOK_EMAIL}>`,
         to: email,
         subject: 'Welcome to the Shop!',
         text: `Dear ${username},\n\nWelcome to the shop! Hope you find all you need.\n\nThanks,\nThe Football Kits Shop Team`
       };
+
+      console.log("Sending welcome email to:", email);
 
       // Send the welcome email
       transporter.sendMail(mailOptions, (err) => {
@@ -55,18 +63,19 @@ router.post('/register', async (req, res) => {
           console.error('Error sending welcome email:', err);
           return res.status(500).json({ message: 'User registered, but failed to send welcome email.' });
         }
-        console.log('Welcome email sent successfully to:', email + ' as they were a custmer');
+        console.log('Welcome email sent successfully to:', email);
         return res.status(201).json({ message: 'User registered successfully! Welcome email sent.' });
       });
     } else {
-      // If the user is staff, just send the success message without sending an email
+      console.log("User registered successfully without email:", newUser);
       return res.status(201).json({ message: 'User registered successfully!' });
     }
   } catch (err) {
-    console.error('Error registering user:', err);
-    res.status(500).json({ message: 'Error registering user', error: err });
+    console.error('Error registering user:', err); // Improved error logging
+    res.status(500).json({ message: 'Error registering user', error: err.message });
   }
 });
+
 
 // POST request to log in a user with username and password
 router.post('/login', async (req, res) => {

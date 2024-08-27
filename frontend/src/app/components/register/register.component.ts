@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { stringify } from 'querystring';
+import { API_BASE_URL } from '../../../../api.config';  // Import the correct API URL
 
 @Component({
   selector: 'app-register',
@@ -16,14 +16,12 @@ export class RegisterComponent {
   password: string = '';
   confirmPassword: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   handleInput(registerForm: any) {
     this.sanatizeUsernameAndPassword();
     this.onInputChange(registerForm);
   }
-
 
   preventInvalidCharactersUsernameAndPassword(event: KeyboardEvent): void {
     const charCode = event.charCode;
@@ -56,18 +54,19 @@ export class RegisterComponent {
         role: form.value.role,
       };
 
-      this.http.post('http://localhost:3000/api/users/register', userData).subscribe(
-        (response: any) => {
-          alert('Registration successful!');
-          form.resetForm();
-          this.router.navigate(['/login']);
-        },
-        (error) => {
-          const errorMessage = error.error?.message || 'Registration failed';
-          alert(errorMessage);
-          console.error(error);
-        }
-      );
+      this.http.post(`${API_BASE_URL}/api/users/register`, userData)
+      .subscribe(
+          (response: any) => {
+            alert('Registration successful!');
+            form.resetForm();
+            this.router.navigate(['/login']);
+          },
+          (error) => {
+            const errorMessage = error.error?.message || 'Registration failed';
+            alert(errorMessage);
+            console.error(error);
+          }
+        );
     }
   }
 
@@ -82,5 +81,4 @@ export class RegisterComponent {
   onInputChange(form: any): void {
     this.allFieldsFilled = form.valid;
   }
-
 }
