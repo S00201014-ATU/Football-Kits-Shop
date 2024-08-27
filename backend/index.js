@@ -14,7 +14,11 @@ const app = express();
 dotenv.config();
 
 // Use CORS to allow requests from different origins
-app.use(cors());
+app.use(cors({
+  origin:['http://localhost:4200/'],
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
 
 // Middleware to parse JSON requests
 app.use(express.json());
