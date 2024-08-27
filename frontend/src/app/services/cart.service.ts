@@ -68,6 +68,13 @@ export class CartService {
     }
   }
 
+  // New method to remove a deleted product from the cart
+  removeProductFromCartByProductId(productId: string): void {
+    const cartItems = this.getCartItems();
+    const updatedCart = cartItems.filter(item => item._id !== productId);
+    this.saveCart(updatedCart);
+  }
+
   // Save the cart items to localStorage
   private saveCart(cartItems: any[]): void {
     localStorage.setItem(this.CART_KEY, JSON.stringify(cartItems));

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +23,8 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +101,7 @@ export class ProductListComponent implements OnInit {
     this.http.delete(`http://localhost:3000/api/products/${productId}`).subscribe(
       () => {
         alert('Product deleted successfully!');
+        this.cartService.removeProductFromCartByProductId(productId);
         this.loadProducts(); // Reload products after deletion
       },
       (error) => {
