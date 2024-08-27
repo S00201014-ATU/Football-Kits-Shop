@@ -1,6 +1,6 @@
 <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="login-form" novalidate>
   <!-- Username Input -->
-  <div class="form-group" [ngClass]="{ 'has-error': loginForm.submitted && !loginForm.form.controls['username'].valid }">
+  <div class="form-group">
     <label for="username">Username:</label>
     <input
       type="text"
@@ -9,14 +9,16 @@
       [(ngModel)]="username"
       required
       #usernameInput="ngModel"
+      placeholder="Enter your username"
+      class="form-control"
     />
-    <div class="error-message" *ngIf="loginForm.submitted && usernameInput.invalid">
+    <p *ngIf="loginForm.submitted && usernameInput.invalid" class="error">
       Username is required.
-    </div>
+    </p>
   </div>
 
   <!-- Password Input -->
-  <div class="form-group" [ngClass]="{ 'has-error': loginForm.submitted && !loginForm.form.controls['password'].valid }">
+  <div class="form-group">
     <label for="password">Password:</label>
     <input
       type="password"
@@ -25,10 +27,12 @@
       [(ngModel)]="password"
       required
       #passwordInput="ngModel"
+      placeholder="Enter your password"
+      class="form-control"
     />
-    <div class="error-message" *ngIf="loginForm.submitted && passwordInput.invalid">
+    <p *ngIf="loginForm.submitted && passwordInput.invalid" class="error">
       Password is required.
-    </div>
+    </p>
   </div>
 
   <!-- Forgot Password Link -->
@@ -43,11 +47,13 @@
   </p>
 
   <!-- Submit Button -->
-  <button
-    type="submit"
-    [hidden]="!loginForm.valid"
-    [disabled]="!loginForm.valid"
-  >
-    Login
-  </button>
+  <div class="button-container">
+    <button
+      type="submit"
+      [disabled]="!loginForm.valid"
+      class="btn-submit"
+    >
+      Login
+    </button>
+  </div>
 </form>

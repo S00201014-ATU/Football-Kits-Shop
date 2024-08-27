@@ -1,57 +1,86 @@
+/* Ensures the body and html fill the whole viewport */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 400px;
+  width: 350px;
+  padding: 20px;
   margin: 0 auto;
-  padding: 30px;
-  border-radius: 10px;
-  background-color: #ffffff;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 h1 {
   text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Roboto', sans-serif;
   color: #333;
-  margin-bottom: 30px;
 }
 
 .form-group {
   margin-bottom: 20px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-  margin-bottom: 8px;
-  display: block;
+  margin-bottom: 5px;
   font-weight: 600;
   font-size: 14px;
-  color: #333;
+  color: #555;
 }
 
-input {
+input, select {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #222;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.btn-submit {
   padding: 12px;
   font-size: 16px;
+  font-weight: bold;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
   border-radius: 6px;
-  border: 1px solid #222;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   width: 100%;
-  transition: all 0.3s ease;
 }
 
-input:focus {
-  border-color: #222;
-  outline: none;
-  box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.1);
+.btn-submit:hover {
+  background-color: #0056b3;
 }
 
-.has-error input {
-  border-color: #222;
-}
-
-.error-message {
-  color: #222;
-  font-size: 12px;
-  margin-top: 5px;
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 
 .forgot-password-link {
@@ -85,37 +114,8 @@ input:focus {
   text-decoration: underline;
 }
 
-button {
-  padding: 12px;
-  font-size: 16px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-button:hover:enabled {
-  background-color: #218838;
-}
-
-@media (max-width: 480px) {
-  .login-form {
-    padding: 20px;
-  }
-
-  input {
-    padding: 10px;
-  }
-
-  button {
-    padding: 10px;
-  }
+.error {
+  color: #d9534f;
+  font-size: 12px;
+  margin-top: 5px;
 }
