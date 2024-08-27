@@ -14,11 +14,13 @@ const app = express();
 dotenv.config();
 
 // Use CORS to allow requests from different origins
+//Will use netlfiy to run frontend
 app.use(cors({
-  origin:['http://localhost:4200/'],
+  origin: ['http://localhost:4200', 'https://your-netlify-domain.netlify.app', 'https://football-kits-shop-kveq.onrender.com'],
   methods: 'GET,POST,PUT,DELETE',
-  credentials: true
+  credentials: true,
 }));
+
 
 // Middleware to parse JSON requests
 app.use(express.json());
