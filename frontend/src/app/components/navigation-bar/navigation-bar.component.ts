@@ -17,6 +17,7 @@ export class NavigationBarComponent implements OnInit {
   isStaff: boolean = false;
   currentRoute: string = '';
   cartIsEmpty: boolean = true;
+  cartItemCount: number = 0;
 
   constructor(
     private router: Router,
@@ -27,14 +28,16 @@ export class NavigationBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cartIsEmpty = this.cartService.getCartItems().length === 0;
+    // Initialize cart state
+    this.updateCartItemCount();
 
+    // Subscribe to cart changes
     this.cartService.cartChanges.subscribe((items) => {
-      this.cartIsEmpty =  items.length === 0;
+      this.updateCartItemCount(items);
       this.cdr.detectChanges();
-    })
+    });
 
-    // Subscribe to login status changes from AuthService
+    // Subscribe to login status changes
     this.authService.isLoggedIn$.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
       if (this.isLoggedIn) {
@@ -54,6 +57,12 @@ export class NavigationBarComponent implements OnInit {
         this.currentRoute = event.urlAfterRedirects;
         this.cdr.detectChanges(); // Trigger change detection
       });
+  }
+
+  // Update the cart item count to reflect the total quantity of items
+  updateCartItemCount(items = this.cartService.getCartItems()): void {
+    this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+    this.cartIsEmpty = this.cartItemCount === 0;
   }
 
   checkUserRole(): void {

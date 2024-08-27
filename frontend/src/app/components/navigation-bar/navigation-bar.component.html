@@ -24,7 +24,8 @@
       routerLink="/cart"
       class="navbar-item"
       [ngClass]="{'active': isActive('/cart')}"
-    >Cart </a>
+      [innerText]="'Cart (' + cartItemCount + ')'"
+    ></a>
 
     <a
       *ngIf="isLoggedIn && !cartIsEmpty"
