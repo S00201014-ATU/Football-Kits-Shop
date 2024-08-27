@@ -3,11 +3,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { CartService } from '../../services/cart.service';
+import { API_BASE_URL } from '../../../../api.config';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.css'
+  styleUrls: ['./product-list.component.css'] // Correct spelling to 'styleUrls'
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
@@ -41,7 +42,7 @@ export class ProductListComponent implements OnInit {
 
   // Load products based on search term or selected tag
   loadProducts(): void {
-    let url = 'http://localhost:3000/api/products';
+    let url = `${API_BASE_URL}/api/products`;
     const params: any = {};
 
     if (this.searchTerm) {
@@ -98,7 +99,7 @@ export class ProductListComponent implements OnInit {
 
   // Handle product deletion
   deleteProduct(productId: string): void {
-    this.http.delete(`http://localhost:3000/api/products/${productId}`).subscribe(
+    this.http.delete(`${API_BASE_URL}/api/products/${productId}`).subscribe(
       () => {
         alert('Product deleted successfully!');
         this.cartService.removeProductFromCartByProductId(productId);
