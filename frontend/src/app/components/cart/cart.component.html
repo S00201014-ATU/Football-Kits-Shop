@@ -19,7 +19,7 @@
       <button class="btn remove-btn" (click)="removeProduct(item._id)">Remove</button>
     </div>
   </div>
-
+  <p>Please note if you log out, your cart will be cleared.</p>
   <div *ngIf="cartItems.length > 0" class="cart-total">
     <p>Total Price: €{{ totalPrice }}</p>
     <div class="cart-total-actions">

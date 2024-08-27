@@ -7,6 +7,7 @@ const productsRoute = require('./routes/products');
 const usersRoute = require('./routes/users');
 const ordersRoute = require('./routes/orders');
 const checkoutRoute = require('./routes/checkout');
+const cartRoute =  require('./routes/cart');
 const app = express();
 
 // Load environment variables from .env file
@@ -31,6 +32,7 @@ app.use('/api/products', productsRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/orders', ordersRoute);
 app.use('/api/checkout', checkoutRoute);
+app.use('/api/cart', cartRoute);
 
 
 // Handle the root route
