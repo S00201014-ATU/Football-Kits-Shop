@@ -39,7 +39,7 @@ router.post('/orders', async (req, res) => {
 
     // Email options
     const mailOptions = {
-      from: process.env.OUTLOOK_EMAIL, // Sender's email address
+      from: '"Football Kits Shop" <' + process.env.OUTLOOK_EMAIL + '>',
       to: email, // Recipient's email address
       subject: 'Your Order Confirmation',
       html: emailContent, // Email content in HTML format
