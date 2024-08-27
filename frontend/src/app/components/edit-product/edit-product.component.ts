@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -20,22 +21,19 @@ export class EditProductComponent implements OnInit {
       europeanCompetition: ''
     }
   };
-  productExists: boolean = false; // New property to track if the product exists
+  productExists: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
-    // Capture the product ID from the route
     this.productId = this.route.snapshot.paramMap.get('id') || '';
-
-    // Log productId to ensure it's captured correctly
     console.log('Product ID:', this.productId);
 
-    // If productId is valid, load the product data
     if (this.productId) {
       this.loadProductData();
     } else {
@@ -44,19 +42,18 @@ export class EditProductComponent implements OnInit {
   }
 
   loadProductData(): void {
-    // Use hardcoded backend URL
     this.http.get(`http://localhost:3000/api/products/${this.productId}`).subscribe(
       (response: any) => {
         if (response) {
           console.log('Product Data Loaded:', response);
           this.productData = response;
-          this.productExists = true; // Set productExists to true if data is found
+          this.productExists = true;
         } else {
-          this.productExists = false; // No product data returned
+          this.productExists = false;
         }
       },
       (error) => {
-        this.productExists = false; // Error occurred, treat as product not existing
+        this.productExists = false;
         console.error('Error loading product data:', error);
       }
     );
@@ -64,11 +61,14 @@ export class EditProductComponent implements OnInit {
 
   onSubmit(form: any): void {
     if (form.valid) {
-      // Submit updated product data using hardcoded backend URL
       this.http.put(`http://localhost:3000/api/products/${this.productId}`, this.productData).subscribe(
         () => {
           alert('Product updated successfully!');
-          this.router.navigate(['/']);
+
+          // Update the cart with the new product details
+          this.cartService.updateProductInCart(this.productData);
+
+          this.router.navigate(['/cart']); // Redirect to cart page after update
         },
         (error) => {
           alert('Failed to update product.');
