@@ -27,7 +27,7 @@
     >Cart </a>
 
     <a
-      *ngIf="isLoggedIn"
+      *ngIf="isLoggedIn && !cartIsEmpty"
       routerLink="/checkout"
       class="navbar-item"
       [ngClass]="{'active': isActive('/checkout')}"

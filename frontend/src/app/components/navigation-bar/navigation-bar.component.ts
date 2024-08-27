@@ -5,6 +5,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
 import { jwtDecode } from 'jwt-decode';
 import { filter } from 'rxjs/operators';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -15,15 +16,24 @@ export class NavigationBarComponent implements OnInit {
   isLoggedIn: boolean = false;
   isStaff: boolean = false;
   currentRoute: string = '';
+  cartIsEmpty: boolean = true;
 
   constructor(
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
+    this.cartIsEmpty = this.cartService.getCartItems().length === 0;
+
+    this.cartService.cartChanges.subscribe((items) => {
+      this.cartIsEmpty =  items.length === 0;
+      this.cdr.detectChanges();
+    })
+
     // Subscribe to login status changes from AuthService
     this.authService.isLoggedIn$.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
