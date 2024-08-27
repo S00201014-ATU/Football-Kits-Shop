@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-register',
@@ -10,8 +11,41 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   passwordMismatch: boolean = false;
   allFieldsFilled: boolean = false;
+  username: string  = '';
+  email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+  }
+
+  handleInput(registerForm: any) {
+    this.sanatizeUsernameAndPassword();
+    this.onInputChange(registerForm);
+  }
+
+
+  preventInvalidCharactersUsernameAndPassword(event: KeyboardEvent): void {
+    const charCode = event.charCode;
+    if (
+      (charCode >= 48 && charCode <= 57) ||
+      (charCode >= 65 && charCode <= 90) || // Uppercase A-Z
+      (charCode >= 97 && charCode <= 122) || // Lowercase a-z
+      (charCode >= 192 && charCode <= 255) // Accented characters (À-ž)
+    ) {
+      return;
+    }
+    event.preventDefault();
+  }
+
+  sanatizeUsernameAndPassword(): void {
+    const sanatizedUsername = this.username.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.username = sanatizedUsername.replace(/\s+/g, ' ').trim();
+    const sanatizedPassword1 = this.password.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.password = sanatizedPassword1.replace(/\s+/g, ' ').trim();
+    const sanatizedPassword2 = this.confirmPassword.replace(/[^a-zA-ZÀ-ž\s']/g, '');
+    this.confirmPassword = sanatizedPassword2.replace(/\s+/g, ' ').trim();
+  }
 
   onSubmit(form: any): void {
     if (form.valid && !this.passwordMismatch) {

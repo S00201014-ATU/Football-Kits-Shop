@@ -1,17 +1,19 @@
+
 <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
   <!-- Username Input -->
   <div class="form-group">
     <label for="username">Username</label>
     <input
-      type="text"
-      id="username"
-      name="username"
-      ngModel
-      required
-      (input)="onInputChange(registerForm)"
-      class="form-control"
-      placeholder="Enter your username"
-    />
+        type="text"
+        id="username"
+        name="forename"
+        [(ngModel)]="username"
+        (input)="sanatizeUsernameAndPassword()"
+        (keypress)="preventInvalidCharactersUsernameAndPassword($event)"
+        required
+        placeholder="Enter your username"
+        #forenameInput="ngModel"
+      />
   </div>
 
   <!-- Email Input -->
@@ -23,10 +25,14 @@
       name="email"
       ngModel
       required
-      (input)="onInputChange(registerForm)"
+      email
       class="form-control"
       placeholder="Enter your email"
+      #email = "ngModel"
     />
+    <div *ngIf="email.invalid" class="error-message">
+      <div *ngIf="email.errors?.['email']">Please enter a valid email address.</div>
+    </div>
   </div>
 
   <!-- Password Input -->
@@ -36,12 +42,15 @@
       type="password"
       id="password"
       name="password"
-      ngModel
+      [(ngModel)]="password"
+      (input)="handleInput(registerForm)"
+      (keypress)="preventInvalidCharactersUsernameAndPassword($event)"
       required
-      (input)="onInputChange(registerForm)"
       class="form-control"
       placeholder="Enter your password"
+      #forenameInput="ngModel"
     />
+
   </div>
 
   <!-- Confirm Password Input -->
@@ -51,9 +60,10 @@
       type="password"
       id="confirmPassword"
       name="confirmPassword"
-      ngModel
+      [(ngModel)]="confirmPassword"
+      (input)="handleInput(registerForm)"
+      (keypress)="preventInvalidCharactersUsernameAndPassword($event)"
       required
-      (input)="onInputChange(registerForm)"
       (blur)="onConfirmPasswordBlur(registerForm)"
       class="form-control"
       placeholder="Confirm your password"
