@@ -68,7 +68,7 @@ export class EditProductComponent implements OnInit {
           // Update the cart with the new product details
           this.cartService.updateProductInCart(this.productData);
 
-          this.router.navigate(['/cart']); // Redirect to cart page after update
+          this.router.navigate(['/']); // Redirect to product list page after update
         },
         (error) => {
           alert('Failed to update product.');
