@@ -24,7 +24,7 @@ export class AddProductComponent {
         }
       };
 
-      this.http.post('http://localhost:3000/api/products', productData).subscribe(
+      this.http.post('https://football-kits-shop-45q5.onrender.com/api/products', productData).subscribe(
         response => {
           alert('Product added successfully!');
           this.router.navigate(['/']);

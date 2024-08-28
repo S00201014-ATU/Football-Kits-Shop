@@ -15,7 +15,7 @@ export class ForgotPasswordComponent {
   onSubmit(form: any): void {
     if (form.valid) {
       const email = form.value.email;
-      this.http.post('http://localhost:3000/api/users/forgot-password', {email}).subscribe(
+      this.http.post('https://football-kits-shop-45q5.onrender.com/api/users/forgot-password', {email}).subscribe(
         (response: any) => {
           this.message = 'Password reset link sent! Please check your email.';
         },

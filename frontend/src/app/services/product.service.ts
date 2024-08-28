@@ -21,7 +21,7 @@ interface Product {
 export class ProductService {
 
   // Backend URL
-  private apiURL = 'http://localhost:3000/api/products';
+  private apiURL = 'https://football-kits-shop-45q5.onrender.com/api/products';
 
   constructor(private http:HttpClient) { }
 

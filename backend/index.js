@@ -43,5 +43,5 @@ app.get('/', (req, res) => {
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Backend server is running on http://localhost:${port}`);
+  console.log(`Backend server is running on https://football-kits-shop-45q5.onrender.com`);
 });

@@ -31,7 +31,7 @@ export class ResetPasswordComponent implements OnInit{
         }
 
         //Send the new password and token to the backend
-        this.http.post('http://localhost:3000/api/users/reset-password', {
+        this.http.post('https://football-kits-shop-45q5.onrender.com/api/users/reset-password', {
           token: this.token,
           newPassword: newPassword
         }).subscribe(

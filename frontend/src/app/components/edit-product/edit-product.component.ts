@@ -42,7 +42,7 @@ export class EditProductComponent implements OnInit {
   }
 
   loadProductData(): void {
-    this.http.get(`http://localhost:3000/api/products/${this.productId}`).subscribe(
+    this.http.get(`https://football-kits-shop-45q5.onrender.com/api/products/${this.productId}`).subscribe(
       (response: any) => {
         if (response) {
           console.log('Product Data Loaded:', response);
@@ -61,7 +61,7 @@ export class EditProductComponent implements OnInit {
 
   onSubmit(form: any): void {
     if (form.valid) {
-      this.http.put(`http://localhost:3000/api/products/${this.productId}`, this.productData).subscribe(
+      this.http.put(`https://football-kits-shop-45q5.onrender.com/api/products/${this.productId}`, this.productData).subscribe(
         () => {
           alert('Product updated successfully!');
 

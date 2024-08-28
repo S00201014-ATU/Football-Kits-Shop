@@ -208,7 +208,7 @@ export class CheckoutComponent implements OnInit {
         totalPrice: formattedTotalPrice,
       };
 
-      this.http.post('http://localhost:3000/api/checkout/orders', orderData)
+      this.http.post('https://football-kits-shop-45q5.onrender.com/api/checkout/orders', orderData)
         .subscribe(
           (response: any) => {
             alert('Order placed successfully!');

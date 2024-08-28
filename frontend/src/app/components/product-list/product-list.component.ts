@@ -41,7 +41,7 @@ export class ProductListComponent implements OnInit {
 
   // Load products based on search term or selected tag
   loadProducts(): void {
-    let url = 'http://localhost:3000/api/products';
+    let url = 'https://football-kits-shop-45q5.onrender.com/api/products';
     const params: any = {};
 
     if (this.searchTerm) {
@@ -98,7 +98,7 @@ export class ProductListComponent implements OnInit {
 
   // Handle product deletion
   deleteProduct(productId: string): void {
-    this.http.delete(`http://localhost:3000/api/products/${productId}`).subscribe(
+    this.http.delete(`https://football-kits-shop-45q5.onrender.com/api/products/${productId}`).subscribe(
       () => {
         alert('Product deleted successfully!');
         this.cartService.removeProductFromCartByProductId(productId);

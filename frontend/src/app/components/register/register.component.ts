@@ -55,7 +55,7 @@ export class RegisterComponent {
         role: form.value.role,
       };
 
-      this.http.post('http://localhost:3000/api/users/register', userData).subscribe(
+      this.http.post('https://football-kits-shop-45q5.onrender.com/api/users/register', userData).subscribe(
         (response: any) => {
           alert('Registration successful!');
           form.resetForm();
