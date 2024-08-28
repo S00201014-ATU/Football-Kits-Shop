@@ -43,7 +43,7 @@ router.post('/register', async (req, res) => {
 
       // Email content for the welcome email
       const mailOptions = {
-        from: process.env.OUTLOOK_EMAIL,
+        from: '"Football Kits Shop" <' + process.env.OUTLOOK_EMAIL + '>',
         to: email,
         subject: 'Welcome to the Shop!',
         text: `Dear ${username},\n\nWelcome to the shop! Hope you find all you need.\n\nThanks,\nThe Football Kits Shop Team`
@@ -138,7 +138,7 @@ router.post('/forgot-password', async (req, res) => {
     // Email content
     const mailOptions = {
       to: user.email,
-      from: process.env.OUTLOOK_EMAIL,
+      from: '"Football Kits Shop" <' + process.env.OUTLOOK_EMAIL + '>',
       subject: 'Password Reset',
       text: `You are receiving this because you have requested to reset your password. Please click the following link to reset your password:\n\n
       http://localhost:4200/reset-password?token=${token}\n\n
