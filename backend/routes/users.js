@@ -6,6 +6,19 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const router = express.Router();
 
+// GET request to retrieve all users
+router.get('/', async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await User.find({});
+    // Send the users back in the response
+    res.status(200).json(users);
+  } catch (error) {
+    // Handle any errors that occur during the database query
+    res.status(500).json({ message: 'Error retrieving users', error });
+  }
+});
+
 // POST request to register a new user
 router.post('/register', async (req, res) => {
   try {
