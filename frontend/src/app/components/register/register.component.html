@@ -17,20 +17,20 @@
 
   <!-- Email Input -->
   <div class="form-group">
-    <label for="email">Email</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      [(ngModel)]="email"
-      required
-      class="form-control"
-      placeholder="Enter your email"
-      #emailInput="ngModel"
-    />
-    <div *ngIf="emailInput.invalid && emailInput.touched" class="error-message">
-      <div *ngIf="emailInput.errors?.['email']">Please enter a valid email address.</div>
-    </div>
+    <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        ngModel
+        required
+        email
+        placeholder="Enter your email"
+        #emailInput="ngModel"
+      />
+      <div *ngIf="emailInput.invalid && emailInput.touched" class="error-message">
+        <div *ngIf="emailInput.errors?.['email']">Please enter a valid email address.</div>
+      </div>
   </div>
 
   <!-- Password Input -->

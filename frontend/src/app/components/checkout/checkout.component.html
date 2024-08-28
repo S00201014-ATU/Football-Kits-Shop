@@ -192,7 +192,7 @@
         <div *ngIf="cardNumberInput.errors?.['required']">Card number is required.</div>
       </div>
       <div *ngIf="!cardNumberInput.errors?.['required'] && cardNumberTouchedAndBlurred && cardNumberInvalidLength" class="error-message">
-        Card number must be 16 digits (without spaces).
+        Card number must be 16 digits.
       </div>
     </div>
     <div>
