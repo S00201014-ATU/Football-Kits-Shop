@@ -20,6 +20,67 @@ router.get('/', async (req, res) => {
 });
 
 // POST request to register a new user
+// router.post('/register', async (req, res) => {
+//   try {
+//     const { username, email, password, role } = req.body;
+
+//     // Check if the email already exists
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ message: 'Email already in use' });
+//     }
+
+//     // Check if the username already exists
+//     const existingUsername = await User.findOne({ username });
+//     if (existingUsername) {
+//       return res.status(400).json({ message: 'Username already in use' });
+//     }
+
+//     // Hash the password before saving it to the database
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Create a new user and save to the database
+//     const newUser = new User({ username, email, password: hashedPassword, role });
+//     await newUser.save();
+
+//     // Send the welcome email only if the user is a customer
+//     if (role === 'customer') {
+//       // Set up Nodemailer for sending the welcome email
+//       const transporter = nodemailer.createTransport({
+//         service: 'Outlook',
+//         auth: {
+//           user: process.env.OUTLOOK_EMAIL,
+//           pass: process.env.OUTLOOK_PASSWORD,
+//         },
+//       });
+
+//       // Email content for the welcome email
+//       const mailOptions = {
+//         from: '"Football Kits Shop" <' + process.env.OUTLOOK_EMAIL + '>',
+//         to: email,
+//         subject: 'Welcome to the Shop!',
+//         text: `Dear ${username},\n\nWelcome to the shop! Hope you find all you need.\n\nThanks,\nThe Football Kits Shop Team`
+//       };
+
+//       // Send the welcome email
+//       transporter.sendMail(mailOptions, (err) => {
+//         if (err) {
+//           console.error('Error sending welcome email:', err);
+//           return res.status(500).json({ message: 'User registered, but failed to send welcome email.' });
+//         }
+//         console.log('Welcome email sent successfully to:', email + ' as they were a custmer');
+//         return res.status(201).json({ message: 'User registered successfully! Welcome email sent.' });
+//       });
+//     } else {
+//       // If the user is staff, just send the success message without sending an email
+//       return res.status(201).json({ message: 'User registered successfully!' });
+//     }
+//   } catch (err) {
+//     console.error('Error registering user:', err);
+//     res.status(500).json({ message: 'Error registering user', error: err });
+//   }
+// });
+
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
@@ -30,93 +91,94 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-    // Check if the username already exists
-    const existingUsername = await User.findOne({ username });
-    if (existingUsername) {
-      return res.status(400).json({ message: 'Username already in use' });
-    }
-
     // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Log hashed password for verification
+    console.log('Hashed Password:', hashedPassword);
 
     // Create a new user and save to the database
     const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
 
-    // Send the welcome email only if the user is a customer
-    if (role === 'customer') {
-      // Set up Nodemailer for sending the welcome email
-      const transporter = nodemailer.createTransport({
-        service: 'Outlook',
-        auth: {
-          user: process.env.OUTLOOK_EMAIL,
-          pass: process.env.OUTLOOK_PASSWORD,
-        },
-      });
-
-      // Email content for the welcome email
-      const mailOptions = {
-        from: '"Football Kits Shop" <' + process.env.OUTLOOK_EMAIL + '>',
-        to: email,
-        subject: 'Welcome to the Shop!',
-        text: `Dear ${username},\n\nWelcome to the shop! Hope you find all you need.\n\nThanks,\nThe Football Kits Shop Team`
-      };
-
-      // Send the welcome email
-      transporter.sendMail(mailOptions, (err) => {
-        if (err) {
-          console.error('Error sending welcome email:', err);
-          return res.status(500).json({ message: 'User registered, but failed to send welcome email.' });
-        }
-        console.log('Welcome email sent successfully to:', email + ' as they were a custmer');
-        return res.status(201).json({ message: 'User registered successfully! Welcome email sent.' });
-      });
-    } else {
-      // If the user is staff, just send the success message without sending an email
-      return res.status(201).json({ message: 'User registered successfully!' });
-    }
+    res.status(201).json({ message: 'User registered successfully!' });
   } catch (err) {
     console.error('Error registering user:', err);
     res.status(500).json({ message: 'Error registering user', error: err });
   }
 });
 
+
 // POST request to log in a user with username and password
+// router.post('/login', async (req, res) => {
+//     const { username, password } = req.body;
+  
+//     try {
+//       // Check if the user exists by username
+//       const user = await User.findOne({ username });
+//       if (!user) {
+//         console.error('Invalid username:', username);
+//         return res.status(400).json({ message: 'Invalid username' });
+//       }
+  
+//       // Log found user and the plain text password from the client
+//       console.log('User found:', user.username);
+//       console.log('Password from client:', password);
+//       console.log('Hashed password in DB:', user.password);
+  
+//       // Compare the password with the stored hashed password
+//       const isMatch = await bcrypt.compare(password, user.password);
+//       console.log('Password comparison result:', isMatch);  // Log the result of the comparison
+  
+//       if (!isMatch) {
+//         console.error('Invalid password for user:', user.username);
+//         return res.status(400).json({ message: 'Invalid password' });
+//       }
+  
+//       // Create a JWT token
+//       const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+//       console.log('Login successful for user:', user.username);
+//       res.status(200).json({ token });
+//     } catch (err) {
+//       console.error('Error logging in user:', err);
+//       res.status(500).json({ message: 'Error logging in', error: err });
+//     }
+//   });
+
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-  
-    try {
-      // Check if the user exists by username
-      const user = await User.findOne({ username });
-      if (!user) {
-        console.error('Invalid username:', username);
-        return res.status(400).json({ message: 'Invalid username' });
-      }
-  
-      // Log found user and the plain text password from the client
-      console.log('User found:', user.username);
-      console.log('Password from client:', password);
-      console.log('Hashed password in DB:', user.password);
-  
-      // Compare the password with the stored hashed password
-      const isMatch = await bcrypt.compare(password, user.password);
-      console.log('Password comparison result:', isMatch);  // Log the result of the comparison
-  
-      if (!isMatch) {
-        console.error('Invalid password for user:', user.username);
-        return res.status(400).json({ message: 'Invalid password' });
-      }
-  
-      // Create a JWT token
-      const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  
-      console.log('Login successful for user:', user.username);
-      res.status(200).json({ token });
-    } catch (err) {
-      console.error('Error logging in user:', err);
-      res.status(500).json({ message: 'Error logging in', error: err });
+  const { username, password } = req.body;
+
+  try {
+    // Check if the user exists by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid username' });
     }
-  });
+
+    // Log user and password details
+    console.log('User found:', user.username);
+    console.log('Password from client:', password);
+    console.log('Hashed password in DB:', user.password);
+
+    // Compare the password with the stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password comparison result:', isMatch);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid password' });
+    }
+
+    // Create a JWT token
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ token });
+  } catch (err) {
+    console.error('Error logging in user:', err);
+    res.status(500).json({ message: 'Error logging in', error: err });
+  }
+});
+
   
 
 // POST request to send reset password link
