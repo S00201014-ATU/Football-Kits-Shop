@@ -33,21 +33,12 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Username already in use' });
     }
 
-    // Log plain text password
-    console.log('Plain Text Password:', password);
-
     // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Log hashed password for verification
-    console.log('Hashed Password Just Before Saving:', hashedPassword);
 
     // Create a new user and save to the database
     const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
-
-    // Log the hashed password saved to the database
-    console.log('Hashed Password Saved to DB:', newUser.password);
 
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (err) {
@@ -61,22 +52,13 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Check if the user exists by username
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: 'Invalid username' });
     }
 
-    // Log user and password details
-    console.log('User found:', user.username);
-    console.log('Password from client:', password);
-    console.log('Hashed password retrieved from DB:', user.password);
-
     // Compare the password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
-
-    // Log the result of the password comparison
-    console.log('Password comparison result:', isMatch);
 
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid password' });
@@ -110,10 +92,15 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
 
     const transporter = nodemailer.createTransport({
-      service: 'Outlook',
+      host: 'smtp-mail.outlook.com',
+      port: 587,
+      secure: false, // use SSL if false, otherwise true
       auth: {
         user: process.env.OUTLOOK_EMAIL,
         pass: process.env.OUTLOOK_PASSWORD,
+      },
+      tls: {
+        ciphers: 'SSLv3',
       },
     });
 
@@ -140,7 +127,6 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
-
 // POST request to reset password
 router.post('/reset-password', async (req, res) => {
   const { token, newPassword } = req.body;
@@ -155,11 +141,7 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ message: 'Password reset token is invalid or has expired.' });
     }
 
-    console.log('New plain text password:', newPassword);
-
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    console.log('Hashed password before saving:', hashedPassword);
 
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
