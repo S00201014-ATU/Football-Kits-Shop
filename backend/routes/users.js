@@ -121,21 +121,25 @@ router.post('/forgot-password', async (req, res) => {
       to: user.email,
       from: `"Football Kits Shop" <${process.env.OUTLOOK_EMAIL}>`,
       subject: 'Password Reset',
-      text: `You are receiving this because you have requested to reset your password. Please click the following link to reset your password:\n\n
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+      Please click on the following link, or paste this into your browser to complete the process:\n\n
       http://localhost:4200/reset-password?token=${token}\n\n
-      If you did not request this, please ignore this email and your password will remain unchanged.`,
+      If you did not request this, please ignore this email and your password will remain unchanged.\n`,
     };
 
     transporter.sendMail(mailOptions, (err) => {
       if (err) {
+        console.error('Error sending email:', err); // Log the email sending error
         return res.status(500).json({ message: 'Error sending email.' });
       }
       res.status(200).json({ message: 'Password reset link sent!' });
     });
   } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    console.error('Unexpected error during forgot-password process:', err); // Log unexpected errors
+    res.status(500).json({ message: 'Server error.', error: err });
   }
 });
+
 
 // POST request to reset password
 router.post('/reset-password', async (req, res) => {
