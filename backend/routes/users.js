@@ -30,14 +30,8 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-    // Check if the username already exists
-    const existingUsername = await User.findOne({ username });
-    if (existingUsername) {
-      return res.status(400).json({ message: 'Username already in use' });
-    }
-
-    // Ensure that no extra spaces or characters are added to the password
-    console.log('Length of password before hashing:', password.length);
+    // Log plain text password before hashing
+    console.log('Plain Text Password:', password);
 
     // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,6 +49,7 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Error registering user', error: err });
   }
 });
+
 
 // POST request to log in a user with username and password
 router.post('/login', async (req, res) => {
