@@ -1,7 +1,5 @@
+# Ignore environment variables file
 .env
-node_modules/
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Ignore Node.js modules directory
+node_modules/
