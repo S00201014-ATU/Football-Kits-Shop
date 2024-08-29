@@ -1,5 +1,5 @@
-# Ignore environment variables file
-.env
+# Node modules
+node_modules
 
-# Ignore Node.js modules directory
-node_modules/
+# Environment variables
+.env
